@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dash"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    tools:context=".MainActivity6">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Patient"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="#00008B"
+        android:id="@+id/titlek"
+        android:layout_marginTop="13dp"
+        android:layout_marginStart="140dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/email0"
+        android:layout_below="@+id/titlek"
+        android:text="Full name:"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"/>
+
+    <EditText
+        android:id="@+id/email1"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email0"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="Your name"
+        android:background="@drawable/carrr1"
+        android:paddingStart="20dp"
+        android:minHeight="48dp"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/em1"
+        android:layout_below="@+id/email1"
+        android:text="Gender:"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"/>
+
+    <EditText
+        android:id="@+id/gen1"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/em1"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/carrr1"
+        android:layout_marginTop="10dp"
+        android:paddingStart="20dp"
+        android:hint="enter gender"
+        android:minHeight="48dp"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/passk"
+        android:layout_below="@+id/gen1"
+        android:text="Age:"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"/>
+
+    <EditText
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/bknz"
+        android:layout_below="@+id/passk"
+        android:background="@drawable/carrr1"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="enter age"
+        android:textStyle="bold"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/passk1"
+        android:layout_below="@+id/bknz"
+        android:text="Residence:"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"/>
+
+    <EditText
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/bkn1"
+        android:layout_below="@+id/passk1"
+        android:background="@drawable/carrr1"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="enter residence"
+        android:textStyle="bold"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/passkb"
+        android:layout_below="@+id/bkn1"
+        android:text="Next of Kin:"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"/>
+
+    <EditText
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/bkn2"
+        android:layout_below="@+id/passkb"
+        android:background="@drawable/carrr1"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="enter next of kin"
+        android:textStyle="bold"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next_of_kin Contact:"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:id="@+id/dky1"
+        android:layout_below="@id/bkn2"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"/>
+    <EditText
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/dky2"
+        android:layout_below="@+id/dky1"
+        android:background="@drawable/carrr1"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="enter contact"
+        android:textStyle="bold"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"/>
+    <Button
+        android:id="@+id/btnk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dky2"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="140dp"
+        android:text="Save"
+        android:drawableRight="@drawable/baseline_arrow_forward_ios_24"
+        android:clickable="true"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dash"
+    tools:context=".geopage">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleb"
+        android:text="Set GeoFence"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="105dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/srch0"
+        android:layout_below="@+id/titleb"
+        android:text="Patient Name:"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"/>
+    <EditText
+        android:id="@+id/intkb"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/srch0"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="enter name"
+        android:background="@drawable/carrr1"
+        android:paddingStart="20dp"
+        android:minHeight="48dp"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/srch1"
+        android:layout_below="@+id/intkb"
+        android:text="Geofence Duration:"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"/>
+    <EditText
+        android:id="@+id/int0"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/srch1"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="14 - 15 days"
+        android:background="@drawable/carrr1"
+        android:paddingStart="20dp"
+        android:minHeight="48dp"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/int1"
+        android:layout_below="@+id/int0"
+        android:text="Enter Longitude:"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"/>
+    <EditText
+        android:id="@+id/int2"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/int1"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="enter longitude"
+        android:background="@drawable/carrr1"
+        android:paddingStart="20dp"
+        android:minHeight="48dp"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/int3"
+        android:layout_below="@+id/int2"
+        android:text="Enter Latitude:"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"/>
+    <EditText
+        android:id="@+id/int4"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/int3"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="enter latitude"
+        android:background="@drawable/carrr1"
+        android:paddingStart="20dp"
+        android:minHeight="48dp"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/int5"
+        android:layout_below="@+id/int4"
+        android:text="Set Circle radius:"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"/>
+    <EditText
+        android:id="@+id/int6"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/int5"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="Maximum is 100 meters"
+        android:background="@drawable/carrr1"
+        android:paddingStart="20dp"
+        android:minHeight="48dp"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:id="@+id/int9"
+        android:layout_below="@+id/int6"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="130dp"/>
+
+</RelativeLayout>

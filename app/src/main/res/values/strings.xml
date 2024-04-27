@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TBmanager</string>
+    <string name="login">Login</string>
+    <string name="your_password">Your password</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">MapsActivity</string>
+</resources>

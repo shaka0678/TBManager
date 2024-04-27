@@ -1,0 +1,21 @@
+
+i
+9app/src/main/java/com/example/tbmanager/MapsActivity.java,9\5\95719a0fbcc8bafa910c24c1249347e1e6c879d3
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+d
+4app/src/main/java/com/example/tbmanager/geopage.java,6\f\6fd489b48c7f01bad9ae8192c50004e1f86b12fc
+D
+app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
+b
+2app/src/main/java/com/example/tbmanager/Login.java,6\4\6490e6854d2e7d7fb6896dd203245f1fc8cadf8c
+h
+8app/src/main/java/com/example/tbmanager/userAdapter.java,6\e\6e0f1bf02bec898211c9308e0be1d0758cc0c3cb
+l
+<app/src/main/java/com/example/tbmanager/ConnectedThread.java,b\3\b3e3e41a97a89d25b1858337e839d948132e0168
+j
+:app/src/main/java/com/example/tbmanager/connectThread.java,6\5\65fb47339e6cb6c1a310d71a4d3eeb0ca3ba0ee5
+j
+:app/src/main/java/com/example/tbmanager/MainActivity2.java,e\e\ee40bd623adb2a592894f14415b0869bc3e785f7
+d
+4app/src/main/java/com/example/tbmanager/devices.java,5\e\5ee1a5e95d0b94f8d04bee403c258c5c80f78623

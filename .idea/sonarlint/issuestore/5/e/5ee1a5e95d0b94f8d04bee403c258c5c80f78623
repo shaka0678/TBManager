@@ -1,0 +1,23 @@
+
+k
+java:S1604>"(Make this anonymous inner class a lambda(Û¾õÊ8’Ã¶ƒò1J$a6458a5a-924c-4dee-bdb8-997ee0fcbe8c
+J
+java:S1604U"(Make this anonymous inner class a lambda(ñ øûÿÿÿÿ8Ê¬Ê†ò1
+k
+java:S1604d"(Make this anonymous inner class a lambda(„¬İ™8Æ¶Äƒò1J$3a227d64-e865-4f82-b7e4-afebfe75ac08
+©	java:S116("gRename this field "REQUEST_BLUETOOTH_PERMISSION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾¨ã¹8ª½ƒò1J$4c24a9a9-d594-40ae-b21c-89e909d51a36
+™	java:S116,"RRename this field "MY_UUID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(½ôšñùÿÿÿÿ8¶½ƒò1J$8ba1536e-8add-4fd0-b423-3d47a3e947c9
+d
+java:S1170("!Make this final field static too.(¾¨ã¹8…½ƒò1J$88c92f48-10a2-4646-b086-02f16c5ed672
+¦
+java:S1450-"^Remove the "bluetoothDevice" field and declare it as a local variable in the relevant methods.(ààµÎşÿÿÿÿ8Ê·Äƒò1J$e6a47c0a-716f-4d2e-8996-910c8c70fd6a
+—
+java:S1450*"URemove the "thread" field and declare it as a local variable in the relevant methods.(â£Ÿ48Ê·Äƒò1J$100e5664-d69c-41ce-805a-d547debe4fff
+t
+java:S3252Z"WUse static access with "androidx.core.content.ContextCompat" for "checkSelfPermission".( Ù³õ8€¶Ê†ò1
+ƒ
+java:S1068("@Remove this unused "REQUEST_BLUETOOTH_PERMISSION" private field.(¾¨ã¹8ç½ƒò1J$ba5893a7-5dcf-4ca0-bad1-127f1de4145d
+O
+java:S1068."2Remove this unused "DEVICE_ADDRESS" private field.(‚óº8Ö¶Ê†ò1
+j
+java:S1068/"'Remove this unused "TAG" private field.(›È‡œ8é½ƒò1J$c9a74224-c8d9-46af-919f-453003a50651

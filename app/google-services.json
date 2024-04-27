@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "516641382179",
+    "project_id": "tbmanager-7cc60",
+    "storage_bucket": "tbmanager-7cc60.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516641382179:android:8524b11b15cf6b8ee1b696",
+        "android_client_info": {
+          "package_name": "com.example.tbmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNrdgnJs_HY8K8hSWTDHvI8vwPxxnX1fQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

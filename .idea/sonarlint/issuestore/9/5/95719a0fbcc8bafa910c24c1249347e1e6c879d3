@@ -1,0 +1,15 @@
+
+
+java:S11241"EReorder the modifiers to comply with the Java Language Specification.(οƒξÿÿÿÿÿ8ώ²¦‚ς1J$4775bde4-ff11-4a57-852c-2ef177f56749
+
+java:S1155M">Use isEmpty() to check whether the collection is empty or not.(›ψωσ8³¦‚ς1J$927d392c-338d-40a3-94da-607a414f257b
+s
+java:S1068/"+Remove this unused "handler" private field.(‰‹θ€ψÿÿÿÿ8Ό³¦‚ς1J$c03316f6-4f59-45af-bacf-c1a0dcf41080
+|
+java:S10680"4Remove this unused "availableDevices" private field.(Πϋϋÿÿÿÿ8Ό³¦‚ς1J$b5afd349-3cb7-496d-8350-c653ae261a54
+v
+java:S10681".Remove this unused "ERROR_READ" private field.(οƒξÿÿÿÿÿ8Ό³¦‚ς1J$82c5ca01-d057-47f5-9552-e8ba68e99c79
+_
+java:S1144k"=Remove this unused private "connectToBluetoothDevice" method.(μΏή®ψÿÿÿÿ8Ά¥Κ†ς1
+Y
+java:S1144p"<Remove this unused private "parseAndDisplayLocation" method.(Α±³¬8ΜΆΝƒς1

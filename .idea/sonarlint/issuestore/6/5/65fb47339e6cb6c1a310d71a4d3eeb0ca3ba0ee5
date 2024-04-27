@@ -1,0 +1,17 @@
+
+Œ	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¤Æ§ÉJ$308e93ce-795a-414d-abfb-0a7d68e4aef0
+”
+java:S1104"SMake handler a static final constant or non-public and provide accessors if needed.(‘ñÑÈÿÿÿÿÿJ$098a32d8-ef89-4920-a214-354ce8a2be4c
+n
+java:S1444"-Make this "public static handler" field final(‘ñÑÈÿÿÿÿÿJ$5b582ca8-991a-40b8-8921-7d8dcca97694
+†
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(ïƒŒîÿÿÿÿÿJ$0ce15c0a-8cf6-4877-8be7-268810ccb6de
+`
+java:S3010"$Remove this assignment of "handler".(ŠûßÌJ$67074814-e389-46c9-af4f-7621fe33bea1
+q
+java:S2209"5Change this instance-reference to a static reference.(ŠûßÌJ$08a5b9c4-ec21-4785-8ba4-9cf7e8e66e36
+v
+java:S1161(":Add the "@Override" annotation above this method signature(“–ýþJ$973efdf1-9a58-45b2-87cf-9fac5cfb4bf6
+W
+java:S36267"Remove this redundant jump.(ûÁÝ…J$671d3911-33c3-4ee9-ad73-f4f370810e31
+|	java:S125<"<This block of commented-out lines of code should be removed.(ëÇÕûÿÿÿÿJ$0b57d551-399d-4b41-bb88-8ab2e60c5a7c
