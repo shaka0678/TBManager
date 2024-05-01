@@ -43,6 +43,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation ("com.jjoe64:graphview:4.2.2")
     implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation ("org.java-websocket:Java-WebSocket:1.5.1")
+
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation("androidx.activity:activity:1.8.0")
     implementation("com.google.code.gson:gson:2.10.1")

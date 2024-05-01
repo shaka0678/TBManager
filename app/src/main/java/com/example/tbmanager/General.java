@@ -1,6 +1,16 @@
 package com.example.tbmanager;
+
 import static android.content.ContentValues.TAG;
 
+import static com.example.tbmanager.General.Coordinates.MY_UUID;
+import static com.example.tbmanager.General.Coordinates.REQUEST_ENABLE_BT;
+
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
@@ -28,6 +38,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -43,18 +54,25 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 public class General extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
 
-    private static class Coordinates {
+    static class Coordinates {
         public double latitude;
         public double longitude;
+        public static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+        static final int REQUEST_ENABLE_BT = 1;
+
+
         public long timestamp;
 
         public Coordinates() {
@@ -109,17 +127,24 @@ public class General extends AppCompatActivity {
     }
 
     private void handleQRCodeScan() {
-        // Assume this method is called when a QR code is successfully scanned
-        String deviceID = "device_id";
-
-        // Start a WiFi server socket
+        // Start a Bluetooth server socket
         new Thread(() -> {
-            ServerSocket serverSocket = null;
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            BluetoothServerSocket serverSocket = null;
             try {
-                serverSocket = new ServerSocket(8888);
-
+                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                serverSocket = bluetoothAdapter.listenUsingRfcommWithServiceRecord("AppName", UUID.fromString("MY_UUID"));
                 while (true) {
-                    Socket clientSocket = serverSocket.accept(); // Wait for client to connect
+                    BluetoothSocket clientSocket = serverSocket.accept(); // Wait for client to connect
                     new Thread(() -> {
                         try {
                             InputStream inputStream = clientSocket.getInputStream();
@@ -131,10 +156,18 @@ public class General extends AppCompatActivity {
                             double latitude = Double.parseDouble(latitudeStr);
                             double longitude = Double.parseDouble(longitudeStr);
 
+                            // Check if the Bluetooth device's MAC address matches the expected value
+                            BluetoothDevice clientDevice = clientSocket.getRemoteDevice();
+                            String macAddress = clientDevice.getAddress();
+                            if (!macAddress.equals("74:8a:28:92:29:5c")) {
+                                showMessage("Invalid device MAC address");
+                                return;
+                            }
+
                             // Store the location data in Firebase
                             long timestamp = System.currentTimeMillis();
                             Coordinates coordinates = new Coordinates(latitude, longitude, timestamp);
-                            databaseReference.child(deviceID).setValue(coordinates);
+                            databaseReference.child("device_id").setValue(coordinates);
 
                             showMessage("Location data received from the client");
 
@@ -160,6 +193,7 @@ public class General extends AppCompatActivity {
             }
         }).start();
     }
+
 
     private void startLocationUpdateTask() {
         Timer timer = new Timer();

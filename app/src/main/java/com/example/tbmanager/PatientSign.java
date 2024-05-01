@@ -27,7 +27,7 @@ public class PatientSign extends AppCompatActivity {
     FirebaseAuth mAuth;
     Button buttonreg;
     Button buttonsigk;
-    TextView textViewAlready;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -37,7 +37,7 @@ public class PatientSign extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         editTextEmail = findViewById(R.id.passb);
         editTextCreatePassword = findViewById(R.id.bkn);
-        textViewAlready = findViewById(R.id.cctxt);
+
         buttonreg = findViewById(R.id.btn1);
 
 
@@ -84,12 +84,6 @@ public class PatientSign extends AppCompatActivity {
                 }
             }
         });
-        textViewAlready.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PatientSign.this, SignParent.class);
-                startActivity(intent);
-            }
-        });
+
       }
     }

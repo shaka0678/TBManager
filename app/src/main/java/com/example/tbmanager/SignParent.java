@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -26,6 +27,7 @@ public class SignParent extends AppCompatActivity {
     EditText editTextpassword;
     FirebaseAuth mAuth;
     Button buttonlog;
+    TextView textViewAlready;
 
 
     @SuppressLint("MissingInflatedId")
@@ -35,6 +37,7 @@ public class SignParent extends AppCompatActivity {
         setContentView(R.layout.activity_sign_parent);
         buttonlog = findViewById(R.id.btn1);
         editTextEmail = findViewById(R.id.email1);
+        textViewAlready = findViewById(R.id.cctxt);
         editTextpassword = findViewById(R.id.pass1);
         mAuth = FirebaseAuth.getInstance();
 
@@ -73,6 +76,12 @@ public class SignParent extends AppCompatActivity {
                 }
             }
         });
-
+        textViewAlready.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignParent.this, PatientSign.class);
+                startActivity(intent);
+            }
+        });
     }
 }
