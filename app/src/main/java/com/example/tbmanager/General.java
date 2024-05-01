@@ -142,7 +142,7 @@ public class General extends AppCompatActivity {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                serverSocket = bluetoothAdapter.listenUsingRfcommWithServiceRecord("AppName", UUID.fromString("MY_UUID"));
+                serverSocket = bluetoothAdapter.listenUsingRfcommWithServiceRecord("AppName", MY_UUID);
                 while (true) {
                     BluetoothSocket clientSocket = serverSocket.accept(); // Wait for client to connect
                     new Thread(() -> {
@@ -159,7 +159,7 @@ public class General extends AppCompatActivity {
                             // Check if the Bluetooth device's MAC address matches the expected value
                             BluetoothDevice clientDevice = clientSocket.getRemoteDevice();
                             String macAddress = clientDevice.getAddress();
-                            if (!macAddress.equals("74:8a:28:92:29:5c")) {
+                            if (!macAddress.equals("74:8a:28:92:3c:5c")) {
                                 showMessage("Invalid device MAC address");
                                 return;
                             }
