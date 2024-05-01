@@ -4,11 +4,11 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="8dp"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="16dp"
     android:id="@+id/cardk"
     android:clickable="true"
     android:layout_margin="16dp">
-    
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

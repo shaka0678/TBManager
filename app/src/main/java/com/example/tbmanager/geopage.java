@@ -52,9 +52,7 @@ public class geopage extends AppCompatActivity {
         editTextradius = findViewById(R.id.int6);
         buttonsub = findViewById(R.id.int9);
 
-        int durationDays = Integer.parseInt(durationText);
 
-        durationMillis = durationDays * 24 * 60 * 60 * 1000;
         geofencingClient = LocationServices.getGeofencingClient(this);
 
         buttonsub.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +66,9 @@ public class geopage extends AppCompatActivity {
                 long durationMillis;
 
                 try {
+                    int durationDays = Integer.parseInt(durationText);
+
+                    durationMillis = durationDays * 24 * 60 * 60 * 1000;
                 } catch (NumberFormatException e) {
                     Toast.makeText(geopage.this, "Quarantine lasts 15 days only", Toast.LENGTH_SHORT).show();
 

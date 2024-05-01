@@ -10,6 +10,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.Geofence;
@@ -22,6 +24,8 @@ import java.util.List;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = "GeofenceBroadcast";
+    private static final String CHANNEL_ID = "GeofenceChannel";
+    private static final int NOTIFICATION_ID = 001;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -51,20 +55,38 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     private void handleGeofenceTransition(Context context, int geofenceTransition, List<Geofence> triggeringGeofences) {
         for (Geofence geofence : triggeringGeofences) {
-            Log.d(TAG, "Geofence transition: " + geofenceTransition + " for geofence ID: " + geofence.getRequestId());
+            String notificationTitle;
+            String notificationText = "He left for geofence ID: " + geofence.getRequestId();
+
+            switch (geofenceTransition) {
+                case Geofence.GEOFENCE_TRANSITION_ENTER:
+                    notificationTitle = "Entered Geofence";
+                    break;
+                case Geofence.GEOFENCE_TRANSITION_EXIT:
+                    notificationTitle = "Exited Geofence";
+                    break;
+                case Geofence.GEOFENCE_TRANSITION_DWELL:
+                    notificationTitle = "In Geofence";
+                    break;
+                default:
+                    Log.e(TAG, "Unknown transition: " + geofenceTransition);
+                    return;
+            }
+
+            sendNotification(context, notificationTitle, notificationText);
         }
     }
 
-    public void createGeofences(Context context, List<Geofence> geofenceList) {
-        GeofencingClient geofencingClient = LocationServices.getGeofencingClient(context);
-        PendingIntent geofencePendingIntent = createGeofencePendingIntent(context);
+    private void sendNotification(Context context, String title, String text) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.baseline_notification_important_24)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000}); // Vibrate pattern
 
-        GeofencingRequest geofencingRequest = new GeofencingRequest.Builder()
-                .addGeofences(geofenceList)
-                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-                .build();
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -74,16 +96,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)
-                .addOnSuccessListener(aVoid -> {
-                    // Geofences added successfully
-                    Log.d(TAG, "Geofences added successfully");
-                })
-                .addOnFailureListener(e -> {
-                    // Failed to add geofences
-                    Log.e(TAG, "Failed to add geofences: " + e.getMessage());
-                    Toast.makeText(context, "Failed to add geofences", Toast.LENGTH_SHORT).show();
-                });
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
     private PendingIntent createGeofencePendingIntent(Context context) {

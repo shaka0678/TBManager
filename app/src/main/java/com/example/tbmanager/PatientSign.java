@@ -11,79 +11,69 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 public class PatientSign extends AppCompatActivity {
     EditText editTextEmail;
-
-    EditText editTextCreatePassword;
+    EditText editTextpassword;
     FirebaseAuth mAuth;
-    Button buttonreg;
-    Button buttonsigk;
+    Button buttonlog;
 
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_sign);
+        buttonlog = findViewById(R.id.btn1);
+        editTextEmail = findViewById(R.id.email1);
+        editTextpassword = findViewById(R.id.pass1);
         mAuth = FirebaseAuth.getInstance();
-        editTextEmail = findViewById(R.id.passb);
-        editTextCreatePassword = findViewById(R.id.bkn);
 
-        buttonreg = findViewById(R.id.btn1);
-
-
-        buttonreg.setOnClickListener(new View.OnClickListener() {
+        buttonlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String email1, pass1;
+                email1 = String.valueOf(editTextEmail.getText());
+                pass1 = String.valueOf(editTextpassword.getText());
 
-                String email = editTextEmail.getText().toString().trim();
-                String password = editTextCreatePassword.getText().toString();
-
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), "Please enter an email", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(email1)) {
+                    Toast.makeText(PatientSign.this, "enter email", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(pass1)) {
+                    Toast.makeText(PatientSign.this, "enter password", Toast.LENGTH_SHORT).show();
                     return;
-                } else {
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(), "Account created successfully.", Toast.LENGTH_SHORT).show();
-
-
-                                    Intent intent = new Intent(PatientSign.this, Patient.class);
-                                    startActivity(intent);
-                                    finish();
-
-                                } else {
-                                    Exception exception = task.getException();
-                                    if (exception instanceof FirebaseAuthUserCollisionException) {
-                                        Toast.makeText(getApplicationContext(), "An account with this email already exists.", Toast.LENGTH_SHORT).show();
-                                    } else if (exception instanceof FirebaseAuthInvalidCredentialsException) {
-                                        Toast.makeText(getApplicationContext(), "Invalid password.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    mAuth.signInWithEmailAndPassword(email1, pass1)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getApplicationContext(), Patient.class);
+                                        startActivity(intent);
+                                        finish();
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "Authentication failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PatientSign.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
-
                             });
-
-
                 }
             }
         });
-
-      }
     }
+}

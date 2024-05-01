@@ -50,7 +50,7 @@
                 android:layout_marginStart="20dp"/>
 
             <EditText
-                android:id="@+id/email1"
+                android:id="@+id/passb"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -74,7 +74,7 @@
                 android:layout_marginStart="20dp"/>
 
             <EditText
-                android:id="@+id/pass1"
+                android:id="@+id/bkn"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"

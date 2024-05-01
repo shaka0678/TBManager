@@ -34,7 +34,7 @@ public class landin extends AppCompatActivity {
            cardViewPat.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
-                   Intent intent = new Intent(landin.this, PatientSign.class);
+                   Intent intent = new Intent(landin.this, SignParent.class);
                    startActivity(intent);
                }
            });
