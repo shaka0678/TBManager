@@ -78,10 +78,10 @@ public class geopage extends AppCompatActivity {
                     radius = Float.parseFloat(radiusStr);
 
                     // Check if the radius is within the valid range
-                    if (radius < 30) {
+                    if (radius < 5) {
                         Toast.makeText(geopage.this, "Below the limit", Toast.LENGTH_SHORT).show();
                         return;
-                    } else if (radius > 100) {
+                    } else if (radius > 20) {
                         Toast.makeText(geopage.this, "Above the limit", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -127,25 +127,16 @@ public class geopage extends AppCompatActivity {
                             new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                             MY_PERMISSIONS_REQUEST_LOCATION);
                 }
-                geofencingClient.addGeofences((GeofencingRequest) geofenceList, geofencePendingIntent);
+                geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent);
+
 
                 Intent mapIntent = new Intent(geopage.this, MapsActivity.class);
                 mapIntent.putExtra("latitude", latitude);
+                mapIntent.putExtra("radius", radius);
                 mapIntent.putExtra("longitude", longitude);
                 startActivity(mapIntent);
-                int geofenceTransition = 0;
-                if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
 
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(geopage.this)
-                            .setSmallIcon(R.drawable.baseline_notification_important_24)
-                            .setContentTitle("Patient Exiting Geofence")
-                            .setContentText("The patient has exited the geofence.")
-                            .setPriority(NotificationCompat.PRIORITY_HIGH);
 
-                    // Show the notification
-                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(geopage.this);
-                    notificationManager.notify(/*notificationId*/ 1, builder.build());
-                }
             }
         });
     }

@@ -29,9 +29,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:clickable="true"
-            android:backgroundTint="#FFF6AB07"
             android:id="@+id/imgbtn0"
-            android:src="@drawable/baseline_bluetooth_24"
+            android:src="@drawable/baseline_connect_without_contact_24"
             android:layout_marginStart="290dp"
             android:layout_marginTop="15dp"
             />
@@ -43,7 +42,7 @@
             android:layout_below="@+id/hm1"
             android:layout_marginStart="20dp"
             android:layout_marginTop="18dp"
-            android:text="Welcome Doctor"
+            android:text="Welcome;"
             android:textSize="25sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -62,23 +61,31 @@
             android:layout_width="match_parent"
             android:layout_height="230dp"
             android:background="#0000Ff"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <com.jjoe64.graphview.GraphView
-                android:id="@+id/idGraphView"
-                android:layout_width="292dp"
-                android:layout_height="182dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp" />
-            <ImageButton
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/jjj"
-                android:src="@drawable/baseline_download_24"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="5dp"
-                android:alpha="0.8"/>
+                android:text="Did you know ?"
+                android:textStyle="bold"
+                android:textSize="28sp"
+                android:textColor="#F5D505"
+                android:textAlignment="center"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TB kills if you don't take the specified medications.We can use technology to prevent the rates at which this deadly desease spread. Lets work together and end TB in our community for a brighter future"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+
 
 
         </LinearLayout>
@@ -121,7 +128,7 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                app:srcCompat="@drawable/baseline_supervised_user_circle_24"
+                app:srcCompat="@drawable/prfile2"
                 tools:ignore="ContentDescription" />
 
             <TextView
