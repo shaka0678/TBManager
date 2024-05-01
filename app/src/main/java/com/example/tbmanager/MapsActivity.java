@@ -18,6 +18,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -40,6 +41,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -47,6 +53,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
@@ -56,6 +64,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient fusedLocationClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference coordinatesRef = database.getReference("Coordinates");
+
 
     private static Handler handler;
     private List<String> availableDevices;
@@ -121,6 +132,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
 
         // Load geofences from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("Geofences", MODE_PRIVATE);
@@ -223,6 +236,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
         }
+        fetchAndPlotCoordinates();
+        startUpdateTask();
     }
 
     @Override
@@ -244,7 +259,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
+    private void fetchAndPlotCoordinates() {
+        coordinatesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Coordinates coordinates = dataSnapshot.getValue(Coordinates.class);
+                    if (coordinates != null) {
+                        LatLng latLng = new LatLng(coordinates.latitude, coordinates.longitude);
+                        mMap.addMarker(new MarkerOptions().position(latLng).title("Marker at " + latLng.toString()));
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("MapsActivity", "Failed to read value.", error.toException());
+            }
+        });
+    }
+    private void startUpdateTask() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(() -> {
+                    mMap.clear(); // Clear previous markers
+                    fetchAndPlotCoordinates(); // Fetch and plot new coordinates
+                });
+            }
+        }, 0, 60000); // Update every 60 seconds
+    }
 
     private void connectToBluetoothDevice(String deviceName) {
         // Replace this with actual Bluetooth connection logic

@@ -20,6 +20,31 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import android.graphics.Bitmap;
+import android.location.Location;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -61,7 +86,7 @@ public class General extends AppCompatActivity {
     }
 
     private Bitmap generateQRCode(String data, int width, int height) {
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        com.google.zxing.qrcode.QRCodeWriter qrCodeWriter = new com.google.zxing.qrcode.QRCodeWriter();
         try {
             BitMatrix bitMatrix = qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, width, height);
             int matrixWidth = bitMatrix.getWidth();
@@ -87,16 +112,53 @@ public class General extends AppCompatActivity {
         // Assume this method is called when a QR code is successfully scanned
         String deviceID = "device_id";
 
-        getCurrentLocation(new CoordinateCallback() {
-            @Override
-            public void onLocationReceived(double latitude, double longitude) {
-                long timestamp = System.currentTimeMillis();
-                Coordinates coordinates = new Coordinates(latitude, longitude, timestamp);
-                databaseReference.child(deviceID).setValue(coordinates);
+        // Start a WiFi server socket
+        new Thread(() -> {
+            ServerSocket serverSocket = null;
+            try {
+                serverSocket = new ServerSocket(8888);
 
-                showMessage("Thank you for connecting");
+                while (true) {
+                    Socket clientSocket = serverSocket.accept(); // Wait for client to connect
+                    new Thread(() -> {
+                        try {
+                            InputStream inputStream = clientSocket.getInputStream();
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                            // Read the latitude and longitude sent by the client
+                            String latitudeStr = reader.readLine();
+                            String longitudeStr = reader.readLine();
+                            double latitude = Double.parseDouble(latitudeStr);
+                            double longitude = Double.parseDouble(longitudeStr);
+
+                            // Store the location data in Firebase
+                            long timestamp = System.currentTimeMillis();
+                            Coordinates coordinates = new Coordinates(latitude, longitude, timestamp);
+                            databaseReference.child(deviceID).setValue(coordinates);
+
+                            showMessage("Location data received from the client");
+
+                            // Close connections
+                            reader.close();
+                            inputStream.close();
+                            clientSocket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (serverSocket != null) {
+                    try {
+                        serverSocket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        });
+        }).start();
     }
 
     private void startLocationUpdateTask() {
