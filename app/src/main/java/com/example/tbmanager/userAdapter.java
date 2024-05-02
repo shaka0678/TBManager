@@ -52,9 +52,9 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtName = itemView.findViewById(R.id.namez);
-            txtAge = itemView.findViewById(R.id.nameb);
-            txtReside= itemView.findViewById(R.id.resid1);
+            txtName = itemView.findViewById(R.id.namek);
+            txtAge = itemView.findViewById(R.id.gbk);
+            txtReside= itemView.findViewById(R.id.resid2);
             // Initialize other TextViews here
         }
     }

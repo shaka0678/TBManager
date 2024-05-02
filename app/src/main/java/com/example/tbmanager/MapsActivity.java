@@ -72,8 +72,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<String> availableDevices;
     private final static int ERROR_READ = 0;
 
-
-
     @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,25 +130,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-
-        // Load geofences from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("Geofences", MODE_PRIVATE);
-        String geofenceJson = sharedPreferences.getString("geofence", "");
-        Type type = new TypeToken<ArrayList<Geofence>>() {
-        }.getType();
-        ArrayList<Geofence> geofenceList = new Gson().fromJson(geofenceJson, type);
-
-        if (geofenceList != null) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 300);
-                return;
-            }
-            geofencingClient.addGeofences(getGeofencingRequest(geofenceList), geofencePendingIntent);
-        }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -227,7 +206,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         } else {
             // Handle the case where LatLng is null
-           // Log.e("MapsActivity", "LatLng object is null");
+            // Log.e("MapsActivity", "LatLng object is null");
         }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -290,22 +269,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void saveGeofence(Geofence geofence) {
-
-        // Save geofence to SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("Geofences", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("geofence", new Gson().toJson(geofence));
-        editor.apply();
-
         // Add geofence to geofencingClient
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         List<Geofence> geofences = new ArrayList<>();
@@ -341,21 +306,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //geofence.setExpirationDuration(Geofence.NEVER_EXPIRE);
         }
 
-        // Save geofences to SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("Geofences", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("geofences", new Gson().toJson(geofences));
-        editor.apply();
-
         // Add geofences to geofencingClient
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         geofencingClient.addGeofences(getGeofencingRequest(geofences), getGeofencePendingIntent())
@@ -373,7 +325,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Toast.makeText(MapsActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
                     }
                 });
-        }
-
     }
-
+}

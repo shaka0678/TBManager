@@ -27,7 +27,7 @@ public class Call extends AppCompatActivity {
         setContentView(R.layout.activity_call);
         buttoncall = findViewById(R.id.calbtn);
         editTextphone= findViewById(R.id.rtyJ);
-// Do not try to cast this to EditText
+        // Do not try to cast this to EditText
 
         buttoncall.setOnClickListener(new View.OnClickListener() {
             @Override
