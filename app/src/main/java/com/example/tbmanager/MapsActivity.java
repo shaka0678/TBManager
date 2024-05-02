@@ -236,8 +236,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
         }
-        fetchAndPlotCoordinates();
-        startUpdateTask();
+
     }
 
     @Override
@@ -259,37 +258,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
-    private void fetchAndPlotCoordinates() {
-        coordinatesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Coordinates coordinates = dataSnapshot.getValue(Coordinates.class);
-                    if (coordinates != null) {
-                        LatLng latLng = new LatLng(coordinates.latitude, coordinates.longitude);
-                        mMap.addMarker(new MarkerOptions().position(latLng).title("Marker at " + latLng.toString()));
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("MapsActivity", "Failed to read value.", error.toException());
-            }
-        });
-    }
-    private void startUpdateTask() {
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(() -> {
-                    mMap.clear(); // Clear previous markers
-                    fetchAndPlotCoordinates(); // Fetch and plot new coordinates
-                });
-            }
-        }, 0, 60000); // Update every 60 seconds
-    }
 
     private void connectToBluetoothDevice(String deviceName) {
         // Replace this with actual Bluetooth connection logic
