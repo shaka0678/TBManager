@@ -79,10 +79,10 @@ public class geopage extends AppCompatActivity {
                     radius = Float.parseFloat(radiusStr);
 
                     // Check if the radius is within the valid range
-                    if (radius < 5) {
+                    if (radius < 20) {
                         Toast.makeText(geopage.this, "Below the limit", Toast.LENGTH_SHORT).show();
                         return;
-                    } else if (radius > 20) {
+                    } else if (radius > 65){
                         Toast.makeText(geopage.this, "Above the limit", Toast.LENGTH_SHORT).show();
                         return;
                     }

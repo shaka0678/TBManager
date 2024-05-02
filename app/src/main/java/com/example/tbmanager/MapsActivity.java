@@ -179,65 +179,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+
+
+// In your MapsActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Get the geofence's latitude, longitude, radius and person's name from the intent
-        LatLng latLng = getIntent().getParcelableExtra("location");
-        if (latLng != null) {
-            double latitude = latLng.latitude;
-            double longitude = latLng.longitude;
-            float radius = getIntent().getFloatExtra("radius", 0);
-            String personName = getIntent().getStringExtra("personName");
+        // Get the geofence's latitude, longitude, and radius from the Intent
+        double latitude = getIntent().getDoubleExtra("latitude", 0);
+        double longitude = getIntent().getDoubleExtra("longitude", 0);
+        float radius = getIntent().getFloatExtra("radius", 0);
 
-            // Draw a circle on the map at the geofence's location with the geofence's radius
-            mMap.addCircle(new CircleOptions()
-                    .center(latLng)
-                    .radius(radius)
-                    .strokeColor(Color.RED)
-                    .fillColor(0x220000FF)
-                    .strokeWidth(5.0f));
+        // Create a LatLng object for the geofence's location
+        LatLng geofenceLocation = new LatLng(latitude, longitude);
 
-            // Add a marker with the person's name as the title
-            mMap.addMarker(new MarkerOptions().position(latLng).title(personName));
+        // Add a circle to the map at the geofence's location with the geofence's radius
+        mMap.addCircle(new CircleOptions()
+                .center(geofenceLocation)
+                .radius(radius)
+                .strokeColor(Color.RED)
+                .fillColor(0x220000FF)
+                .strokeWidth(5.0f));
 
-            // Move the camera to the geofence's location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        } else {
-            // Handle the case where LatLng is null
-            // Log.e("MapsActivity", "LatLng object is null");
-        }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-        } else {
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
-        }
-
+        // Move the map's camera to the geofence's location
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(geofenceLocation));
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 100) {
-            // ... Your existing code ...
-        } else if (requestCode == 200) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Bluetooth permission granted, you can continue with Bluetooth operations
-            } else {
-                Toast.makeText(this, "Bluetooth permission denied!", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == 300) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Location permission granted, you can continue with Location operations
-            } else {
-                Toast.makeText(this, "Location permission denied!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
 
     private void connectToBluetoothDevice(String deviceName) {
         // Replace this with actual Bluetooth connection logic

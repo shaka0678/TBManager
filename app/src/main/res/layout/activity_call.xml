@@ -32,7 +32,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"/>
 
-    <EditText
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/edtk"
         android:layout_width="330dp"
         android:layout_height="50dp"
