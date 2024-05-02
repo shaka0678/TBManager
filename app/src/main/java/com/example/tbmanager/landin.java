@@ -21,8 +21,8 @@ public class landin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_landin);
-            cardViewdoc = findViewById(R.id.patientCard);
-            cardViewPat = findViewById(R.id.appointCard);
+            cardViewdoc = findViewById(R.id.appointCard);
+            cardViewPat = findViewById(R.id.patientCard);
            cardViewdoc.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {

@@ -17,7 +17,7 @@ import com.google.android.material.textview.MaterialTextView;
 public class Call extends AppCompatActivity {
     Button buttoncall;
     EditText editTextphone;
-    MaterialTextView eMaterialTextView;
+
     private static final int REQUEST_CALL_PERMISSION = 100; // Define this constant at class level
 
     @SuppressLint("WrongViewCast")
@@ -26,7 +26,7 @@ public class Call extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
         buttoncall = findViewById(R.id.calbtn);
-        MaterialTextView materialTextView = findViewById(R.id.rtyJ);
+        editTextphone= findViewById(R.id.rtyJ);
 // Do not try to cast this to EditText
 
         buttoncall.setOnClickListener(new View.OnClickListener() {
@@ -38,7 +38,7 @@ public class Call extends AppCompatActivity {
     }
 
     private void makeCall() {
-        String number = eMaterialTextView.getText().toString();
+        String number = editTextphone.getText().toString();
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(Uri.parse("tel:" + number));
         if (ActivityCompat.checkSelfPermission(Call.this,
