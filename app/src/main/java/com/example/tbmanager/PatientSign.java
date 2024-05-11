@@ -36,8 +36,8 @@ public class PatientSign extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_sign);
         buttonlog = findViewById(R.id.btn1);
-        editTextEmail = findViewById(R.id.email1);
-        editTextpassword = findViewById(R.id.pass1);
+        editTextEmail = findViewById(R.id.passb);
+        editTextpassword = findViewById(R.id.bkn);
         mAuth = FirebaseAuth.getInstance();
 
         buttonlog.setOnClickListener(new View.OnClickListener() {

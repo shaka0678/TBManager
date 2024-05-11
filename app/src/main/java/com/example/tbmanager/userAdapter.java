@@ -25,7 +25,7 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.activity_main3, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -34,7 +34,7 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ViewHolder> {
         userlist currentUser = mUserList.get(position);
 
         // Bind user details to the ViewHolder
-        holder.txtName.setText(String.valueOf(currentUser.getFullname()));
+        holder.txtName.setText((currentUser.getFullname()));
         holder.txtAge.setText(String.valueOf(currentUser.getGender()));
         holder.txtReside.setText(String.valueOf(currentUser.getResidence()));
         // Add more fields as needed
@@ -52,9 +52,9 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtName = itemView.findViewById(R.id.namek);
-            txtAge = itemView.findViewById(R.id.gbk);
-            txtReside= itemView.findViewById(R.id.resid2);
+            txtName = itemView.findViewById(R.id.namez);
+            txtAge = itemView.findViewById(R.id.nameb);
+            txtReside= itemView.findViewById(R.id.resid1);
             // Initialize other TextViews here
         }
     }
