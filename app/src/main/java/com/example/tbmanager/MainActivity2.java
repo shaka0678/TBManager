@@ -26,8 +26,8 @@ public class MainActivity2 extends AppCompatActivity {
     CardView cardViewgeo;
     CardView cardViewsettings;
     CardView cardViewinfo;
-    GraphView graphView;
-    ImageButton imageButtondown;
+
+    ImageButton imageButtonfence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +42,15 @@ public class MainActivity2 extends AppCompatActivity {
         cardViewinfo = findViewById(R.id.sysinfo);
         cardViewgeo = findViewById(R.id.ageofence);
         imageButtonNOT = findViewById(R.id.imgbtn0);
+        imageButtonfence = findViewById(R.id.imgbtnB);
 
-
-
+        imageButtonfence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity2.this, Fences.class);
+                startActivity(intent);
+            }
+        });
 
 
         imageButtonNOT.setOnClickListener(new View.OnClickListener() {

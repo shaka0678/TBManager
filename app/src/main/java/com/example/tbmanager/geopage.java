@@ -24,9 +24,13 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class geopage extends AppCompatActivity {
     EditText editTextduration;
@@ -34,7 +38,10 @@ public class geopage extends AppCompatActivity {
     EditText editTextLog;
     EditText editTextlat;
     EditText editTextradius;
+    EditText editTextResidence;
     Button buttonsub;
+
+    Button buttonsave;
     private GeofencingClient geofencingClient;
     private List<Geofence> geofenceList = new ArrayList<>();
     private final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
@@ -46,14 +53,44 @@ public class geopage extends AppCompatActivity {
         setContentView(R.layout.activity_geopage);
 
         editTextPatient = findViewById(R.id.intkb);
+        editTextResidence = findViewById(R.id.intkbs);
         editTextduration= findViewById(R.id.int0);
         editTextLog = findViewById(R.id.int2);
         editTextlat = findViewById(R.id.int4);
         editTextradius = findViewById(R.id.int6);
         buttonsub = findViewById(R.id.int9);
+        buttonsave = findViewById(R.id.int19);
 
 
         geofencingClient = LocationServices.getGeofencingClient(this);
+
+        buttonsave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the input data
+                String patientName = editTextPatient.getText().toString();
+                String residence = editTextResidence.getText().toString();
+                String duration = editTextduration.getText().toString();
+                String longitude = editTextLog.getText().toString();
+                String latitude = editTextlat.getText().toString();
+                String radius = editTextradius.getText().toString();
+
+                // Create a new HashMap of values to be saved in Firebase
+                Map<String, Object> geofenceData = new HashMap<>();
+                geofenceData.put("patientName", patientName);
+                geofenceData.put("residence", residence);
+                geofenceData.put("duration", duration);
+                geofenceData.put("longitude", longitude);
+                geofenceData.put("latitude", latitude);
+                geofenceData.put("radius", radius);
+
+                // Get a reference to the Firebase Database
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+
+                // Push the data to Firebase
+                mDatabase.child("geofenced").push().setValue(geofenceData);
+            }
+        });
 
         buttonsub.setOnClickListener(new View.OnClickListener() {
             @Override
