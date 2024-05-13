@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -65,6 +66,10 @@ public class devices extends AppCompatActivity {
         buttondiscover = findViewById(R.id.dat13);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         lvNewDevices = findViewById(R.id.lvNewDevices);
+
+        mDeviceListAdapter = new DeviceListAdapter(this, R.layout.device_adapter, mBTDevices);
+        lvNewDevices.setAdapter(mDeviceListAdapter);
+
 
         imageButtonbck.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,22 +174,11 @@ public class devices extends AppCompatActivity {
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 mBTDevices.add(device);
-                if (ActivityCompat.checkSelfPermission(devices.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                Log.d(TAG, "onReceive: " + device.getName() + ": " + device.getAddress());
-                mDeviceListAdapter = new DeviceListAdapter(context, R.layout.device_adapter, mBTDevices);
-                lvNewDevices.setAdapter(mDeviceListAdapter);
+                mDeviceListAdapter.notifyDataSetChanged(); // This line updates the adapter with the new data
             }
         }
     };
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
