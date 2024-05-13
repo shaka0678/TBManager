@@ -61,16 +61,18 @@
         android:minHeight="48dp"
         android:textColor="@color/white"
         android:textStyle="bold" />
+
     <TextView
+        android:id="@+id/srch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/srch1"
         android:layout_below="@+id/intkbs"
-        android:text="Geofence Duration:"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="8dp"
+        android:text="Gofence Start Date:"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <EditText
         android:id="@+id/int0"
         android:layout_width="350dp"
@@ -78,7 +80,6 @@
         android:layout_below="@+id/srch1"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:hint="14 - 15 days"
         android:background="@drawable/carrr1"
         android:paddingStart="20dp"
         android:minHeight="48dp"
@@ -140,19 +141,21 @@
         android:textStyle="bold"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"/>
+
     <EditText
         android:id="@+id/int6"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/int5"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:hint="Maximum is 100 meters"
+        android:layout_marginTop="7dp"
         android:background="@drawable/carrr1"
-        android:paddingStart="20dp"
+        android:hint="Maximum is 100 meters"
         android:minHeight="48dp"
+        android:paddingStart="20dp"
         android:textColor="@color/white"
         android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
