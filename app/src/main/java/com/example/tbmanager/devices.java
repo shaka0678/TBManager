@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -42,30 +43,38 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class devices extends AppCompatActivity {
-    Button buttondev;
+    Button buttondiscover;
     Button buttoncon;
-
     ImageButton imageButtonbck;
-    ImageButton imageButtondiscover;
     private static final int REQUEST_ENABLE_BT = 1;
     public ArrayList<BluetoothDevice> mBTDevices = new ArrayList<>();
     public DeviceListAdapter mDeviceListAdapter;
     ListView lvNewDevices;
     BluetoothAdapter mBluetoothAdapter;
     private static final int PERMISSION_REQUEST_CODE = 200;
+    private BluetoothSocket mBTSocket = null;
+    private static final UUID MY_UUID_INSECURE = UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_devices);
         buttoncon = findViewById(R.id.dat3);
         imageButtonbck = findViewById(R.id.imageB);
-        imageButtondiscover = findViewById(R.id.dat13);
+        buttondiscover = findViewById(R.id.dat13);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        lvNewDevices = findViewById(R.id.lvNewDevices);
 
         imageButtonbck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(devices.this, MainActivity2.class);
+                startActivity(intent);
+            }
+        });
+
+        buttoncon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mBluetoothAdapter == null) {
@@ -83,7 +92,7 @@ public class devices extends AppCompatActivity {
             }
         });
 
-        imageButtondiscover.setOnClickListener(new View.OnClickListener() {
+        buttondiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ActivityCompat.checkSelfPermission(devices.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
@@ -103,8 +112,36 @@ public class devices extends AppCompatActivity {
             }
         });
 
-        lvNewDevices = findViewById(R.id.lvNewDevices);
-        mBTDevices = new ArrayList<>();
+        lvNewDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (ActivityCompat.checkSelfPermission(devices.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                mBluetoothAdapter.cancelDiscovery();
+
+                String deviceName = mBTDevices.get(i).getName();
+                String deviceAddress = mBTDevices.get(i).getAddress();
+
+                // Create a bond
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    Log.d(TAG, "Trying to pair with " + deviceName);
+                    mBTDevices.get(i).createBond();
+
+                    // Connect to the device
+                    BluetoothDevice device = mBTDevices.get(i);
+                    BluetoothConnectThread connect = new BluetoothConnectThread(device);
+                    connect.start();
+                }
+            }
+        });
     }
 
     private void checkBTPermissions() {
@@ -154,6 +191,58 @@ public class devices extends AppCompatActivity {
                     Toast.makeText(devices.this, "Permission Denied", Toast.LENGTH_SHORT).show();
                 }
                 break;
+        }
+    }
+
+    private class BluetoothConnectThread extends Thread {
+        private final BluetoothDevice mmDevice;
+
+        public BluetoothConnectThread(BluetoothDevice device) {
+            mmDevice = device;
+        }
+
+        public void run() {
+            BluetoothSocket tmp = null;
+
+            try {
+                if (ActivityCompat.checkSelfPermission(devices.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                tmp = mmDevice.createRfcommSocketToServiceRecord(MY_UUID_INSECURE);
+            } catch (IOException e) {
+                Log.e(TAG, "Socket's create() method failed", e);
+            }
+
+            mBTSocket = tmp;
+            mBluetoothAdapter.cancelDiscovery();
+
+            try {
+                mBTSocket.connect();
+                Log.d(TAG, "run: ConnectThread connected.");
+            } catch (IOException connectException) {
+                try {
+                    mBTSocket.close();
+                    Log.d(TAG, "run: Closed Socket.");
+                } catch (IOException closeException) {
+                    Log.e(TAG, "Could not close the client socket", closeException);
+                }
+                return;
+            }
+        }
+
+        public void cancel() {
+            try {
+                mBTSocket.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Could not close the client socket", e);
+            }
         }
     }
 }

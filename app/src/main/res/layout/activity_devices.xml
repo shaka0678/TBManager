@@ -24,6 +24,7 @@
         android:id="@+id/smk"
         android:padding="15dp"
         android:layout_below="@+id/dat1">
+
         <Button
             android:id="@+id/dat3"
             android:layout_width="wrap_content"
@@ -33,7 +34,8 @@
             android:layout_marginTop="23dp"
             android:background="@drawable/carrr1"
             android:text="Connect"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
+
         <Button
             android:id="@+id/dat13"
             android:layout_width="wrap_content"
@@ -43,20 +45,18 @@
             android:layout_marginTop="23dp"
             android:background="@drawable/carrr1"
             android:text="Discover"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
     </LinearLayout>
 
+
     <ListView
-        android:layout_below="@id/smk"
+        android:id="@+id/lvNewDevices"
         android:layout_width="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
         android:layout_height="150dp"
-        android:id="@+id/lvNewDevices"/>
-
-
-
+        android:layout_below="@id/smk"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="20dp" />
 
     <ImageButton
         android:id="@+id/imageB"
