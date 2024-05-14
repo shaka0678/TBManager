@@ -8,7 +8,10 @@ import android.app.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -20,6 +23,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +45,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -49,6 +55,7 @@ import java.util.UUID;
 public class devices extends AppCompatActivity {
     Button buttondiscover;
     Button buttoncon;
+    Button buttonenable;
     ImageButton imageButtonbck;
     private ListView listView;
     private BluetoothAdapter mBTAdapter;
@@ -72,11 +79,66 @@ public class devices extends AppCompatActivity {
         buttondiscover = (Button) findViewById(R.id.dat13);
         buttoncon = (Button) findViewById(R.id.dat3);
         imageButtonbck = findViewById(R.id.imageB);
+        buttonenable = findViewById(R.id.dat14);
+        listView = findViewById(R.id.lvNewDevices);
         imageButtonbck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-           Intent intent = new Intent(devices.this, MainActivity2.class);
-           startActivity(intent);
+                Intent intent = new Intent(devices.this, MainActivity2.class);
+                startActivity(intent);
+            }
+        });
+
+        buttonenable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Check if Bluetooth is enabled
+                if (!mBTAdapter.isEnabled()) {
+                    Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableBT, BT_ENABLE_REQUEST);
+                } else {
+                    // Start Bluetooth discovery
+                    if (ActivityCompat.checkSelfPermission(devices.this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    mBTAdapter.startDiscovery();
+                }
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Cancel discovery because it's costly and we're about to connect
+                if (ActivityCompat.checkSelfPermission(devices.this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                mBTAdapter.cancelDiscovery();
+
+                // Get the device MAC address, the last 17 chars in the View
+                String info = ((TextView) view).getText().toString();
+                String address = info.substring(info.length() - 17);
+
+                // Get the BluetoothDevice object
+                BluetoothDevice device = mBTAdapter.getRemoteDevice(address);
+
+                // Attempt to connect to the device
+                // You need to implement a method connectDevice that pairs and connects with the device
+                connectDevice(device);
             }
         });
 
@@ -108,7 +170,68 @@ public class devices extends AppCompatActivity {
                 if (mBTAdapter == null) {
                     Toast.makeText(getApplicationContext(), "Bluetooth not found", Toast.LENGTH_SHORT).show();
                 } else if (!mBTAdapter.isEnabled()) {
+                    // Create an AlertDialog
+                    new AlertDialog.Builder(devices.this)
+                            .setTitle("Bluetooth Connection")
+                            .setMessage("Do you want to enable Bluetooth connection?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User clicked the "Yes" button, enable Bluetooth
+                                    Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                    if (ActivityCompat.checkSelfPermission(devices.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                        // TODO: Consider calling ActivityCompat#requestPermissions
+                                        return;
+                                    }
+                                    startActivityForResult(enableBT, BT_ENABLE_REQUEST);
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                } else {
+                    new SearchDevices().execute();
+                }
+            }
+        });
+
+        buttondiscover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                mBTAdapter = BluetoothAdapter.getDefaultAdapter();
+                if (mBTAdapter == null) {
+                    Toast.makeText(getApplicationContext(), "Bluetooth not found", Toast.LENGTH_SHORT).show();
+                } else if (!mBTAdapter.isEnabled()) {
                     Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableBT, BT_ENABLE_REQUEST);
+                } else {
+                    if (ActivityCompat.checkSelfPermission(devices.this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    mBTAdapter.startDiscovery();
+
+                    // Make the device discoverable
+                    int requestCode = 1;
+                    Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+                    discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+                    startActivityForResult(discoverableIntent, requestCode);
+                }
+            }
+        });
+
+// Create a BroadcastReceiver for ACTION_FOUND
+        final BroadcastReceiver receiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    // Discovery has found a device. Get the BluetoothDevice
+                    // object and its info from the Intent.
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     if (ActivityCompat.checkSelfPermission(devices.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
@@ -119,42 +242,138 @@ public class devices extends AppCompatActivity {
                         // for ActivityCompat#requestPermissions for more details.
                         return;
                     }
-                    startActivityForResult(enableBT, BT_ENABLE_REQUEST);
-                } else {
-                    new SearchDevices().execute();
+                    String deviceName = device.getName();
+                    String deviceHardwareAddress = device.getAddress(); // MAC address
+
+                    // Add the name and address to your listView adapter here
+                    MyAdapter adapter = (MyAdapter) listView.getAdapter();
+                    adapter.add(deviceName + "\n" + deviceHardwareAddress);
+                    adapter.notifyDataSetChanged();
                 }
             }
-        });
+        };
 
-        buttondiscover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                try {
-                    BluetoothDevice device = ((MyAdapter) (listView.getAdapter())).getSelectedItem();
-                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                    intent.putExtra(DEVICE_EXTRA, device);
-                    intent.putExtra(DEVICE_UUID, mDeviceUUID.toString());
-                    intent.putExtra(BUFFER_SIZE, mBufferSize);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    // Handled the exception here
-                    AlertDialog.Builder builder = new AlertDialog.Builder(devices.this);
-                    builder.setTitle("Alert");
-                    builder.setMessage("Select Device to connect ");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            }
-        });
-
+// Register for broadcasts when a device is discovered.
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(receiver, filter);
 
     }
 
+    private void connectDevice(BluetoothDevice device) {
+        BluetoothSocket bluetoothSocket = null;
+
+        try {
+            // Get a BluetoothSocket to connect with the given BluetoothDevice
+            // MY_UUID is the app's UUID string, also used by the server code
+            UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // Standard SerialPortService ID
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            bluetoothSocket = device.createRfcommSocketToServiceRecord(MY_UUID);
+
+            // Cancel discovery because it's costly and we're about to connect
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+
+            // Connect to the remote device through the socket. This call blocks
+            // until it succeeds or throws an exception
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+
+                return;
+            }
+            bluetoothSocket.connect();
+
+            // Do work here to manage the connection (in a separate thread)
+            manageConnectedSocket(bluetoothSocket);
+        } catch (IOException e) {
+            // Unable to connect; close the socket and return
+            try {
+                bluetoothSocket.close();
+            } catch (IOException closeException) {
+                Log.e(TAG, "Could not close the client socket", closeException);
+            }
+            return;
+        }
+    }
+
+    private void manageConnectedSocket(BluetoothSocket socket) {
+        // Create a separate thread to read data from the socket
+        Thread readThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                byte[] buffer = new byte[1024];  // buffer store for the stream
+                int bytes; // bytes returned from read()
+
+                // Keep listening to the InputStream until an exception occurs
+                while (true) {
+                    try {
+                        // Read from the InputStream
+                        bytes = socket.getInputStream().read(buffer);
+                        // Send the obtained bytes to the UI activity
+                        // You need to implement a method handleMessage that handles the received data
+                        handleMessage(buffer, bytes);
+                    } catch (IOException e) {
+                        break;
+                    }
+                }
+            }
+        });
+
+        // Create a separate thread to write data to the socket
+        Thread writeThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                byte[] buffer = new byte[1024];  // buffer store for the stream
+
+                // Keep writing to the OutputStream until an exception occurs
+                while (true) {
+                    try {
+                        // Write to the OutputStream
+                        socket.getOutputStream().write(buffer);
+                    } catch (IOException e) {
+                        break;
+                    }
+                }
+            }
+        });
+
+        // Start the threads
+        readThread.start();
+        writeThread.start();
+    }
+
+    private void handleMessage(byte[] buffer, int bytes) {
+        // Convert the bytes to a string
+        String receivedMessage = new String(buffer, 0, bytes);
+
+        // Now you can use this string to update your UI or process the data
+        // For example, you can use a Handler to send the message to the UI thread
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                // Assuming you have a TextView to display the received message
+                TextView textView = findViewById(R.id.textViewR);
+                textView.setText(receivedMessage);
+            }
+        });
+    }
     protected void onPause() {
 // TODO Auto-generated method stub
         super.onPause();
@@ -306,6 +525,9 @@ public class devices extends AppCompatActivity {
         @Override
         public long getItemId(int position) {
             return position;
+        }
+
+        public void add(String s) {
         }
 
         private class ViewHolder {

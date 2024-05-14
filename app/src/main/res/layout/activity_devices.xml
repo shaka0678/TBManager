@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/smk"
-        android:padding="15dp"
+        android:padding="7dp"
         android:layout_below="@+id/dat1">
 
         <Button
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dat1"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="23dp"
             android:background="@drawable/carrr1"
             android:text="Connect"
@@ -41,10 +41,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dat1"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="23dp"
             android:background="@drawable/carrr1"
             android:text="Discover"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/dat14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dat1"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="23dp"
+            android:background="@drawable/carrr1"
+            android:text="Connect"
             android:textSize="15sp" />
     </LinearLayout>
 
@@ -66,6 +77,14 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         app:srcCompat="@drawable/baseline_arrow_back_24s" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewR"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
 
 
 </RelativeLayout>
