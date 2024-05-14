@@ -473,7 +473,7 @@ public class devices extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<BluetoothDevice> listDevices) {
             super.onPostExecute(listDevices);
-            if (listDevices.size() > 0) {
+            if (listDevices != null && listDevices.size() > 0) {
                 MyAdapter adapter = (MyAdapter) listView.getAdapter();
                 adapter.replaceItems(listDevices);
             } else {
