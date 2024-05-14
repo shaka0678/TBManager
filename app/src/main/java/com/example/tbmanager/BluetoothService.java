@@ -57,6 +57,7 @@ public class BluetoothService extends Service {
                         // Write to Firebase Realtime Database
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference myRef = database.getReference("coordinates");
+                        // the data stored in the table called coordinates should have 2 children is longitude and latitude
                         myRef.setValue(strReceived);
                     } catch (IOException e) {
                         e.printStackTrace();
