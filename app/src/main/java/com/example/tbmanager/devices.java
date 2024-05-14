@@ -189,8 +189,6 @@ public class devices extends AppCompatActivity {
                             })
                             .setNegativeButton("No", null)
                             .show();
-                } else {
-                    new SearchDevices().execute();
                 }
             }
         });
