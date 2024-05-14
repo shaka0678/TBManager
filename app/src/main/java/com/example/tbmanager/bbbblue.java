@@ -11,7 +11,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Switch;
+import android.widget.Toast;
+import android.Manifest;
+
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -32,6 +37,7 @@ import java.util.UUID;
 public class bbbblue extends AppCompatActivity {
     Button buttoncon;
     ImageButton imageButtonbck;
+    Switch aSwitchcon;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -41,7 +47,38 @@ public class bbbblue extends AppCompatActivity {
         setContentView(R.layout.activity_bbbblue);
         buttoncon = (Button) findViewById(R.id.dat3k);
         imageButtonbck = findViewById(R.id.imageBy);
+        aSwitchcon =findViewById(R.id.switch2);
 
+
+        aSwitchcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                if (bluetoothAdapter == null) {
+                    // Device doesn't support Bluetooth
+                    return;
+                }
+                if (isChecked) {
+                    // The toggle is enabled/checked
+                    // Enable Bluetooth
+                    if (!bluetoothAdapter.isEnabled()) {
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling ActivityCompat#requestPermissions here to request the missing permissions
+                            return;
+                        }
+                        bluetoothAdapter.enable();
+                    }
+                    Toast.makeText(getApplicationContext(), "Switch is on, Bluetooth enabled", Toast.LENGTH_SHORT).show();
+                } else {
+                    // The toggle is disabled/unchecked
+                    // Disable Bluetooth
+                    if (bluetoothAdapter.isEnabled()) {
+                        bluetoothAdapter.disable();
+                    }
+                    Toast.makeText(getApplicationContext(), "Switch is off, Bluetooth disabled", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         imageButtonbck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,41 +96,8 @@ public class bbbblue extends AppCompatActivity {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                        if (bluetoothAdapter != null) {
-                            if (!bluetoothAdapter.isEnabled()) {
-                                if (ActivityCompat.checkSelfPermission(bbbblue.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                                    // TODO: Consider calling
-                                    //    ActivityCompat#requestPermissions
-                                    // here to request the missing permissions, and then overriding
-                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                    //                                          int[] grantResults)
-                                    // to handle the case where the user grants the permission. See the documentation
-                                    // for ActivityCompat#requestPermissions for more details.
-                                    return;
-                                }
-                                bluetoothAdapter.enable();
-                            }
-                            BluetoothDevice device = bluetoothAdapter.getRemoteDevice("00:22:11:30:C5:62");
-                            BluetoothSocket socket = null;
-                            try {
-                                socket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")); // UUID for Serial Port Profile
-                                socket.connect();
-                                InputStream inputStream = socket.getInputStream();
-                                byte[] buffer = new byte[1024];
-                                int bytes;
-                                while (true) {
-                                    bytes = inputStream.read(buffer);
-                                    String strReceived = new String(buffer, 0, bytes);
-                                    // Write to Firebase Realtime Database
-                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                    DatabaseReference myRef = database.getReference("coordinates");
-                                    myRef.setValue(strReceived);
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                        Intent intent = new Intent(bbbblue.this, BluetoothService.class);
+                        startService(intent);
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -102,18 +106,11 @@ public class bbbblue extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-                builder.setNeutralButton("", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 // Set the neutral button to be a close icon
-                Button neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-                Drawable closeIcon = ResourcesCompat.getDrawable(getResources(), R.drawable.baseline_close_24, null);
-                neutralButton.setCompoundDrawablesWithIntrinsicBounds(closeIcon, null, null, null);
+
             }
         });
 

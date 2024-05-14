@@ -32,7 +32,8 @@
         android:orientation="horizontal"
         android:id="@+id/smk"
         android:padding="7dp"
-        android:layout_below="@+id/dat1">
+        android:layout_below="@+id/dat1"
+        tools:ignore="UseSwitchCompatOrMaterialXml">
 
         <Button
             android:id="@+id/dat3k"
@@ -44,6 +45,13 @@
             android:background="@drawable/carrr1"
             android:text="Connect"
             android:textSize="15sp" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="23dp"
+            android:id="@+id/switch2"/>
 
 
     </LinearLayout>
