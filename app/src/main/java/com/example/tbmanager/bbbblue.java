@@ -59,8 +59,41 @@ public class bbbblue extends AppCompatActivity {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(bbbblue.this, BluetoothService.class);
-                        startService(intent);
+                        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                        if (bluetoothAdapter != null) {
+                            if (!bluetoothAdapter.isEnabled()) {
+                                if (ActivityCompat.checkSelfPermission(bbbblue.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                    // TODO: Consider calling
+                                    //    ActivityCompat#requestPermissions
+                                    // here to request the missing permissions, and then overriding
+                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                    //                                          int[] grantResults)
+                                    // to handle the case where the user grants the permission. See the documentation
+                                    // for ActivityCompat#requestPermissions for more details.
+                                    return;
+                                }
+                                bluetoothAdapter.enable();
+                            }
+                            BluetoothDevice device = bluetoothAdapter.getRemoteDevice("00:22:11:30:C5:62");
+                            BluetoothSocket socket = null;
+                            try {
+                                socket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")); // UUID for Serial Port Profile
+                                socket.connect();
+                                InputStream inputStream = socket.getInputStream();
+                                byte[] buffer = new byte[1024];
+                                int bytes;
+                                while (true) {
+                                    bytes = inputStream.read(buffer);
+                                    String strReceived = new String(buffer, 0, bytes);
+                                    // Write to Firebase Realtime Database
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference myRef = database.getReference("coordinates");
+                                    myRef.setValue(strReceived);
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
