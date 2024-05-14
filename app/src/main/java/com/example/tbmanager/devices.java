@@ -195,8 +195,6 @@ public class devices extends AppCompatActivity {
                             })
                             .setNegativeButton("No", null)
                             .show();
-                } else {
-                    new SearchDevices().execute();
                 }
             }
         });
@@ -394,7 +392,7 @@ public class devices extends AppCompatActivity {
             case BT_ENABLE_REQUEST:
                 if (resultCode == RESULT_OK) {
                     msg("Bluetooth Enabled successfully");
-                    new SearchDevices().execute();
+                    //new SearchDevices().execute();
                 } else {
                     msg("Bluetooth couldn't be enabled");
                 }
@@ -453,41 +451,6 @@ public class devices extends AppCompatActivity {
      * will show up with this.
      *
      */
-    private class SearchDevices extends AsyncTask<Void, Void, List<BluetoothDevice>> {
-
-        @Override
-        protected List<BluetoothDevice> doInBackground(Void... params) {
-            if (ActivityCompat.checkSelfPermission(devices.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return null;
-            }
-            Set<BluetoothDevice> pairedDevices = mBTAdapter.getBondedDevices();
-            List<BluetoothDevice> listDevices = new ArrayList<BluetoothDevice>();
-            for (BluetoothDevice device : pairedDevices) {
-                listDevices.add(device);
-            }
-            return listDevices;
-
-        }
-
-        @Override
-        protected void onPostExecute(List<BluetoothDevice> listDevices) {
-            super.onPostExecute(listDevices);
-            if (listDevices != null && listDevices.size() > 0) {
-                MyAdapter adapter = (MyAdapter) listView.getAdapter();
-                adapter.replaceItems(listDevices);
-            } else {
-                msg("No paired devices found, please pair your serial BT device and try again");
-            }
-        }
-
-    }
 
     /**
      * Custom adapter to show the current devices in the list. This is a bit of an overkill for this
