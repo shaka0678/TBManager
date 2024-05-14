@@ -185,10 +185,18 @@ public class devices extends AppCompatActivity {
                                         return;
                                     }
                                     startActivityForResult(enableBT, BT_ENABLE_REQUEST);
+
+                                    // Get the remote device and initiate a connection
+                                    String deviceAddress = "00:22:11:30:C5:62";
+                                    BluetoothDevice device = mBTAdapter.getRemoteDevice(deviceAddress);
+                                    // Assuming you have a method connectToDevice that takes a BluetoothDevice and connects to it
+                                    connectDevice(device);
                                 }
                             })
                             .setNegativeButton("No", null)
                             .show();
+                } else {
+                    new SearchDevices().execute();
                 }
             }
         });
