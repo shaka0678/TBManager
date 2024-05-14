@@ -61,6 +61,7 @@ public class devices extends AppCompatActivity {
     private BluetoothAdapter mBTAdapter;
     private static final int BT_ENABLE_REQUEST = 10; //  for BT Enable
     private static final int SETTINGS = 20;
+    private static final int REQUEST_CODE_PERMISSION_BLUETOOTH_SCAN =100;
     private UUID mDeviceUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private int mBufferSize = 50000; //Default
     public static final String DEVICE_EXTRA = "com.example.anysensormonitoring.SOCKET";
@@ -177,8 +178,9 @@ public class devices extends AppCompatActivity {
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // User clicked the "Yes" button, enable Bluetooth
-                                    Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                                    if (ActivityCompat.checkSelfPermission(devices.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                    Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+                                    enableBT.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+                                    if (ActivityCompat.checkSelfPermission(devices.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(devices.this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                                         // TODO: Consider calling ActivityCompat#requestPermissions
                                         return;
                                     }
@@ -192,11 +194,12 @@ public class devices extends AppCompatActivity {
                 }
             }
         });
-
         buttondiscover.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View arg0) {
                 mBTAdapter = BluetoothAdapter.getDefaultAdapter();
+
                 if (mBTAdapter == null) {
                     Toast.makeText(getApplicationContext(), "Bluetooth not found", Toast.LENGTH_SHORT).show();
                 } else if (!mBTAdapter.isEnabled()) {
@@ -204,15 +207,10 @@ public class devices extends AppCompatActivity {
                     startActivityForResult(enableBT, BT_ENABLE_REQUEST);
                 } else {
                     if (ActivityCompat.checkSelfPermission(devices.this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
+                        ActivityCompat.requestPermissions(devices.this, new String[]{android.Manifest.permission.BLUETOOTH_SCAN}, REQUEST_CODE_PERMISSION_BLUETOOTH_SCAN);
                         return;
                     }
+
                     mBTAdapter.startDiscovery();
 
                     // Make the device discoverable
@@ -223,7 +221,6 @@ public class devices extends AppCompatActivity {
                 }
             }
         });
-
 // Create a BroadcastReceiver for ACTION_FOUND
         final BroadcastReceiver receiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
