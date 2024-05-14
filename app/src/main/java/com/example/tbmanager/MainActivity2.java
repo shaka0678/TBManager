@@ -56,7 +56,7 @@ public class MainActivity2 extends AppCompatActivity {
         imageButtonNOT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity2.this,devices.class);
+                Intent intent = new Intent(MainActivity2.this,bbbblue.class);
                 startActivity(intent);
             }
         });

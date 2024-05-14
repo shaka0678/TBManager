@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dash"
+    tools:context=".bbbblue">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Available Devices"
+        android:textStyle="bold"
+        android:textSize="29dp"
+        android:layout_marginStart="90dp"
+        android:id="@+id/dat1"
+        android:layout_marginTop="20dp"/>
+    <ImageButton
+        android:id="@+id/imageBy"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        app:srcCompat="@drawable/baseline_arrow_back_24s" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/smk"
+        android:padding="7dp"
+        android:layout_below="@+id/dat1">
+
+        <Button
+            android:id="@+id/dat3k"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dat1"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="23dp"
+            android:background="@drawable/carrr1"
+            android:text="Connect"
+            android:textSize="15sp" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
