@@ -1,97 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:background="@drawable/dash"
     android:layout_height="match_parent"
+    android:background="@drawable/dash"
     tools:context=".devices">
 
+
     <TextView
+        android:id="@+id/btDevicesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Available Devices"
-        android:textStyle="bold"
-        android:textSize="29dp"
-        android:layout_marginStart="90dp"
-        android:id="@+id/dat1"
-        android:layout_marginTop="20dp"/>
-    <LinearLayout
-        android:layout_width="match_parent"
+        android:text="Linked Bluetooth devices:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.157" />
+
+    <TextView
+        android:id="@+id/btDevices"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/smk"
-        android:padding="7dp"
-        android:layout_below="@+id/dat1">
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.24" />
 
+    <TextView
+        android:id="@+id/btReadingsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Humidity + Temperature:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.602" />
 
-
-        <Button
-            android:id="@+id/seachDevices"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/dat1"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="23dp"
-            android:background="@drawable/carrr1"
-            android:text="Search linked BT devices"
-
-            android:textSize="15sp" />
-
-
-    </LinearLayout>
-
+    <TextView
+        android:id="@+id/btReadings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.725" />
 
     <ImageButton
         android:id="@+id/imageB"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:clickable="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        app:srcCompat="@drawable/baseline_arrow_back_24s" />
+        app:srcCompat="@drawable/baseline_arrow_back_24s"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="12dp" />
 
-    <TextView
+    <Button
+        android:id="@+id/seachDevices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btDevicesText"
-        android:text="Linked Bluetooth devices:"
-        android:layout_below="@+id/smk"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="64dp"
+        android:text="Search linked BT devices"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/connectToDevice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="112dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="360dp"
         android:enabled="false"
         android:text="Connect to HC-05"
-        android:layout_below="@+id/btDevicesText"/>
-    <TextView
-        android:id="@+id/btReadingsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Latitude: + Longitude:"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:layout_below="@+id/connectToDevice"
-       android:layout_marginTop="12dp"
-        android:layout_marginStart="60dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
     <Button
         android:id="@+id/refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
-        android:layout_marginTop="64dp"
-        android:layout_below="@+id/btReadingsText"
+        android:layout_marginTop="624dp"
         android:text="Clear"
-       />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
-
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
