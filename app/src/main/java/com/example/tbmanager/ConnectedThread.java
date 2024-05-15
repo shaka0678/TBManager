@@ -1,16 +1,15 @@
 package com.example.tbmanager;
 
-
 import android.bluetooth.BluetoothSocket;
-import android.os.Handler;
 import android.util.Log;
-
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-//Class that given an open BT Socket will
-//Open, manage and close the data Stream from the Arduino BT device
 public class ConnectedThread extends Thread {
 
     private static final String TAG = "FrugalLogs";
@@ -24,8 +23,6 @@ public class ConnectedThread extends Thread {
         InputStream tmpIn = null;
         OutputStream tmpOut = null;
 
-        // Get the input and output streams; using temp objects because
-        // member streams are final.
         try {
             tmpIn = socket.getInputStream();
         } catch (IOException e) {
@@ -36,8 +33,7 @@ public class ConnectedThread extends Thread {
         } catch (IOException e) {
             Log.e(TAG, "Error occurred when creating output stream", e);
         }
-        //Input and Output streams members of the class
-        //We wont use the Output stream of this project
+
         mmInStream = tmpIn;
         mmOutStream = tmpOut;
     }
@@ -47,39 +43,35 @@ public class ConnectedThread extends Thread {
     }
 
     public void run() {
-
         byte[] buffer = new byte[1024];
-        int bytes = 0; // bytes returned from read()
-        int numberOfReadings = 0; //to control the number of readings from the Arduino
+        int bytes; // bytes returned from read()
 
-        // Keep listening to the InputStream until an exception occurs.
-        //We just want to get 1 temperature readings from the Arduino
-        while (numberOfReadings < 1) {
+        while (true) {
             try {
+                bytes = mmInStream.read(buffer);
+                String incomingMessage = new String(buffer, 0, bytes);
+                Log.d(TAG, "InputStream: " + incomingMessage);
 
-                buffer[bytes] = (byte) mmInStream.read();
-                String readMessage;
-                // If I detect a "\n" means I already read a full measurement
-                if (buffer[bytes] == '\n') {
-                    readMessage = new String(buffer, 0, bytes);
-                    Log.e(TAG, readMessage);
-                    //Value to be read by the Observer streamed by the Obervable
-                    valueRead=readMessage;
-                    bytes = 0;
-                    numberOfReadings++;
-                } else {
-                    bytes++;
+                String[] coords = incomingMessage.split(",");
+                if (coords.length == 2) {
+                    double longitude = Double.parseDouble(coords[0]);
+                    double latitude = Double.parseDouble(coords[1]);
+
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geocoords");
+                    Map<String, Double> coordMap = new HashMap<>();
+                    coordMap.put("longitude", longitude);
+                    coordMap.put("latitude", latitude);
+                    ref.setValue(coordMap);
                 }
 
-            } catch (IOException e) {
-                Log.d(TAG, "Input stream was disconnected", e);
+                Thread.sleep(60000);
+            } catch (IOException | InterruptedException e) {
+                Log.e(TAG, "Error reading from InputStream.", e);
                 break;
             }
         }
-
     }
 
-    // Call this method from the main activity to shut down the connection.
     public void cancel() {
         try {
             mmSocket.close();

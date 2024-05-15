@@ -36,7 +36,8 @@
         android:id="@+id/btReadingsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Humidity + Temperature:"
+        android:text="Longitude + Latitude:"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,8 +64,9 @@
         android:layout_height="40dp"
         android:clickable="true"
         app:srcCompat="@drawable/baseline_arrow_back_24s"
-        tools:layout_editor_absoluteX="27dp"
-        tools:layout_editor_absoluteY="12dp" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="24dp" />
 
     <Button
         android:id="@+id/seachDevices"
