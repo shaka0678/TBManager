@@ -1,6 +1,5 @@
 package com.example.tbmanager;
 
-
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -15,7 +14,7 @@ import java.util.UUID;
 //Given a BT device, the UUID and a Handler to set the results
 public class connectThread extends Thread {
     private final BluetoothSocket mmSocket;
-    private static final String TAG = "BluetoothConnection";
+    private static final String TAG = "FrugalLogs";
     public static Handler handler;
     private final static int ERROR_READ = 0;
 

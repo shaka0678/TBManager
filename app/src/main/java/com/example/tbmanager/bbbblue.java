@@ -33,13 +33,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Set;
 import java.util.UUID;
 
 public class bbbblue extends AppCompatActivity {
     Button buttoncon;
     ImageButton imageButtonbck;
     Switch aSwitchcon;
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1; // or any other unique integer
+    private static final int MY_PERMISSIONS_REQUEST_BLUETOOTH_CONNECT = 1; // or any other unique integer
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -98,8 +99,72 @@ public class bbbblue extends AppCompatActivity {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(bbbblue.this, BluetoothService.class);
-                        startService(intent);
+                        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                        if (bluetoothAdapter == null) {
+                            // Device doesn't support Bluetooth
+                            return;
+                        }
+
+                        // Check if Bluetooth is enabled
+                        if (!bluetoothAdapter.isEnabled()) {
+                            // Enable Bluetooth
+                            if (ContextCompat.checkSelfPermission(bbbblue.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(bbbblue.this,
+                                        new String[]{Manifest.permission.BLUETOOTH_CONNECT},
+                                        MY_PERMISSIONS_REQUEST_BLUETOOTH_CONNECT);
+                                return;
+                            }
+                            bluetoothAdapter.enable();
+                        }
+
+                        // Get the paired devices
+                        if (ContextCompat.checkSelfPermission(bbbblue.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(bbbblue.this,
+                                    new String[]{Manifest.permission.BLUETOOTH_CONNECT},
+                                    MY_PERMISSIONS_REQUEST_BLUETOOTH_CONNECT);
+                            return;
+                        }
+                        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+
+                        // Check if the device with the specific MAC address is paired
+                        for (BluetoothDevice device : pairedDevices) {
+                            if (device.getAddress().equals("00:22:11:30:C5:62")) {
+                                // The device is paired, connect to it
+                                try {
+                                    if (ContextCompat.checkSelfPermission(bbbblue.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                        ActivityCompat.requestPermissions(bbbblue.this,
+                                                new String[]{Manifest.permission.BLUETOOTH_CONNECT},
+                                                MY_PERMISSIONS_REQUEST_BLUETOOTH_CONNECT);
+                                        return;
+                                    }
+                                    BluetoothSocket socket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")); // UUID for SPP
+                                    if (ContextCompat.checkSelfPermission(bbbblue.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                                        ActivityCompat.requestPermissions(bbbblue.this,
+                                                new String[]{Manifest.permission.BLUETOOTH_CONNECT},
+                                                MY_PERMISSIONS_REQUEST_BLUETOOTH_CONNECT);
+                                        return;
+                                    }
+                                    socket.connect();
+
+                                    // Start receiving data
+                                    InputStream inputStream = socket.getInputStream();
+                                    byte[] buffer = new byte[1024];
+                                    int bytes;
+
+                                    // Read from the InputStream
+                                    if ((bytes = inputStream.read(buffer)) > 0) {
+                                        String readMessage = new String(buffer, 0, bytes);
+
+                                        // Send the data to Firebase
+                                        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                                        database.child("coordinates").push().setValue(readMessage);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                        }
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -109,65 +174,28 @@ public class bbbblue extends AppCompatActivity {
                     }
                 });
 
-                builder.setNeutralButton("Connection", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                        BluetoothDevice device = bluetoothAdapter.getRemoteDevice("00:22:11:30:C5:62");
 
-                        if (ContextCompat.checkSelfPermission(bbbblue.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                                != PackageManager.PERMISSION_GRANTED) {
-                            // Permission is not granted
-                            ActivityCompat.requestPermissions(bbbblue.this,
-                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-                        }
-                        if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-                            // The device is not paired, show a dialog asking the user to pair
-                            AlertDialog.Builder pairBuilder = new AlertDialog.Builder(bbbblue.this);
-                            pairBuilder.setTitle("Pair with device");
-                            if (ContextCompat.checkSelfPermission(bbbblue.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                                    != PackageManager.PERMISSION_GRANTED) {
-                                // Permission is not granted
-                                ActivityCompat.requestPermissions(bbbblue.this,
-                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-                            }
-                            pairBuilder.setMessage("Do you want to pair with the device " + device.getName() + "?");
-                            pairBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Pair with the device
-                                    // Note: This requires the BLUETOOTH_ADMIN permission
-                                    try {
-                                        if (ContextCompat.checkSelfPermission(bbbblue.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                                                != PackageManager.PERMISSION_GRANTED) {
-                                            // Permission is not granted
-                                            ActivityCompat.requestPermissions(bbbblue.this,
-                                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-                                        }
-                                        device.createBond();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                            pairBuilder.setNegativeButton("No", null);
-                            pairBuilder.show();
-                        } else {
-                            // The device is already paired, start the BluetoothService
-                            Intent intent = new Intent(bbbblue.this, BluetoothService.class);
-                            startService(intent);
-                        }
-                    }
-                });
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
         });
 
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_BLUETOOTH_CONNECT: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted
+                } else {
+                    // permission denied
+                }
+                return;
+            }
+            // other 'case' lines to check for other permissions this app might request
+        }
     }
 
 }

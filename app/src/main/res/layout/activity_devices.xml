@@ -25,49 +25,23 @@
         android:padding="7dp"
         android:layout_below="@+id/dat1">
 
-        <Button
-            android:id="@+id/dat3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/dat1"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="23dp"
-            android:background="@drawable/carrr1"
-            android:text="Connect"
-            android:textSize="15sp" />
+
 
         <Button
-            android:id="@+id/dat13"
+            android:id="@+id/seachDevices"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dat1"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="23dp"
             android:background="@drawable/carrr1"
-            android:text="Discover"
+            android:text="Search linked BT devices"
+
             android:textSize="15sp" />
 
-        <Button
-            android:id="@+id/dat14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/dat1"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="23dp"
-            android:background="@drawable/carrr1"
-            android:text="Connect"
-            android:textSize="15sp" />
+
     </LinearLayout>
 
-
-    <ListView
-        android:id="@+id/lvNewDevices"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_below="@id/smk"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="20dp" />
 
     <ImageButton
         android:id="@+id/imageB"
@@ -81,9 +55,42 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewR"
+        android:id="@+id/btDevicesText"
+        android:text="Linked Bluetooth devices:"
+        android:layout_below="@+id/smk"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
         android:textSize="20sp"
         android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/connectToDevice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="200dp"
+        android:enabled="false"
+        android:text="Connect to HC-05"
+        android:layout_below="@+id/btDevicesText"/>
+    <TextView
+        android:id="@+id/btReadingsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Latitude: + Longitude:"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_below="@+id/connectToDevice"
+       android:layout_marginTop="12dp"
+        android:layout_marginStart="60dp"/>
+    <Button
+        android:id="@+id/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="64dp"
+        android:layout_below="@+id/btReadingsText"
+        android:text="Clear"
+       />
 
 
 
