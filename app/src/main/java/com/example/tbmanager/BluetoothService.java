@@ -43,24 +43,35 @@ public class BluetoothService extends Service {
             e.printStackTrace();
         }
 
-        thread = new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 byte[] buffer = new byte[1024];
                 int bytes;
 
-                while (true) {
+                while (!Thread.currentThread().isInterrupted()) {
                     try {
                         bytes = inputStream.read(buffer);
+                        if (bytes == -1) {
+                            break; // End of stream has been reached
+                        }
                         String strReceived = new String(buffer, 0, bytes);
 
-                        // Write to Firebase Realtime Database
-                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference myRef = database.getReference("coordinates");
-                        // the data stored in the table called coordinates should have 2 children is longitude and latitude
-                        myRef.setValue(strReceived);
-                    } catch (IOException e) {
+                        // Split the received string into longitude and latitude
+                        String[] parts = strReceived.split(",");
+                        if (parts.length >= 2) {
+                            double longitude = Double.parseDouble(parts[0]);
+                            double latitude = Double.parseDouble(parts[1]);
+
+                            // Write longitude and latitude to Firebase Realtime Database
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference myRef = database.getReference("coordinates");
+                            myRef.child("longitude").setValue(longitude);
+                            myRef.child("latitude").setValue(latitude);
+                        }
+                    } catch (IOException | NumberFormatException e) {
                         e.printStackTrace();
+                        Thread.currentThread().interrupt(); // Interrupt the thread if an error occurs
                     }
                 }
             }
@@ -82,7 +93,6 @@ public class BluetoothService extends Service {
             e.printStackTrace();
         }
     }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
