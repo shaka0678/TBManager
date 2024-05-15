@@ -93,7 +93,7 @@ public class BluetoothService extends Service {
             e.printStackTrace();
         }
     }
-    @Nullable
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;

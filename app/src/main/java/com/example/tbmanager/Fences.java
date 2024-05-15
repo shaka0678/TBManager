@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Calendar;
 import java.util.Date;
 
 public class Fences extends AppCompatActivity {
@@ -38,5 +40,8 @@ public class Fences extends AppCompatActivity {
         adapter = new PatientAdapter(reference);
         recyclerView.setAdapter(adapter);
 
+        // Example target date (replace with your actual target date)
+        Date targetDate = new Date(2024, Calendar.MAY, 31); // May 31, 2024
+        adapter.startCountDownTimer(targetDate);
     }
 }

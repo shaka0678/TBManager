@@ -22,6 +22,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -38,6 +39,7 @@ public class bbbblue extends AppCompatActivity {
     Button buttoncon;
     ImageButton imageButtonbck;
     Switch aSwitchcon;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1; // or any other unique integer
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -47,7 +49,7 @@ public class bbbblue extends AppCompatActivity {
         setContentView(R.layout.activity_bbbblue);
         buttoncon = (Button) findViewById(R.id.dat3k);
         imageButtonbck = findViewById(R.id.imageBy);
-        aSwitchcon =findViewById(R.id.switch2);
+        aSwitchcon = findViewById(R.id.switch2);
 
 
         aSwitchcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -107,10 +109,62 @@ public class bbbblue extends AppCompatActivity {
                     }
                 });
 
+                builder.setNeutralButton("Connection", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                        BluetoothDevice device = bluetoothAdapter.getRemoteDevice("00:22:11:30:C5:62");
+
+                        if (ContextCompat.checkSelfPermission(bbbblue.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            // Permission is not granted
+                            ActivityCompat.requestPermissions(bbbblue.this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                        }
+                        if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+                            // The device is not paired, show a dialog asking the user to pair
+                            AlertDialog.Builder pairBuilder = new AlertDialog.Builder(bbbblue.this);
+                            pairBuilder.setTitle("Pair with device");
+                            if (ContextCompat.checkSelfPermission(bbbblue.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                    != PackageManager.PERMISSION_GRANTED) {
+                                // Permission is not granted
+                                ActivityCompat.requestPermissions(bbbblue.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                            }
+                            pairBuilder.setMessage("Do you want to pair with the device " + device.getName() + "?");
+                            pairBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Pair with the device
+                                    // Note: This requires the BLUETOOTH_ADMIN permission
+                                    try {
+                                        if (ContextCompat.checkSelfPermission(bbbblue.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                                != PackageManager.PERMISSION_GRANTED) {
+                                            // Permission is not granted
+                                            ActivityCompat.requestPermissions(bbbblue.this,
+                                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                                        }
+                                        device.createBond();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            pairBuilder.setNegativeButton("No", null);
+                            pairBuilder.show();
+                        } else {
+                            // The device is already paired, start the BluetoothService
+                            Intent intent = new Intent(bbbblue.this, BluetoothService.class);
+                            startService(intent);
+                        }
+                    }
+                });
+
                 AlertDialog dialog = builder.create();
                 dialog.show();
-                // Set the neutral button to be a close icon
-
             }
         });
 
