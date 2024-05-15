@@ -14,6 +14,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,7 @@ import io.reactivex.schedulers.Schedulers;
 public class devices extends AppCompatActivity {
     // Global variables we will use in the
     private static final String TAG = "FrugalLogs";
+    ImageButton imageButtonbck;
     private static final int REQUEST_ENABLE_BT = 1;
     //We will use a Handler to get the BT Connection statys
     public static Handler handler;
@@ -46,10 +48,19 @@ public class devices extends AppCompatActivity {
         //Intances of the Android UI elements that will will use during the execution of the APP
         TextView btReadings = findViewById(R.id.btReadingsText);
         TextView btDevices = findViewById(R.id.btDevicesText);
+        imageButtonbck = findViewById(R.id.imageB);
         Button connectToDevice = (Button) findViewById(R.id.connectToDevice);
         Button seachDevices = (Button) findViewById(R.id.seachDevices);
         Button clearValues = (Button) findViewById(R.id.refresh);
         Log.d(TAG, "Begin Execution");
+
+        imageButtonbck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(devices.this, MainActivity2.class);
+                startActivity(intent);
+            }
+        });
 
 
 
