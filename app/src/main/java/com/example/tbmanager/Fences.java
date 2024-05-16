@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ public class Fences extends AppCompatActivity implements patientInterface {
         databaseReference = FirebaseDatabase.getInstance().getReference("fenced");
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         list = new ArrayList<>();
         patientAdapter= new PatientAdapter(Fences.this,list);

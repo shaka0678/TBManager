@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +30,9 @@ public class MainActivity3 extends AppCompatActivity implements patientInterface
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Prevent screenshots and screen recordings
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+
         setContentView(R.layout.activity_main3);
         recyclerView = findViewById(R.id.patlist);
         databaseReference = FirebaseDatabase.getInstance().getReference("Patients");
@@ -57,8 +61,7 @@ public class MainActivity3 extends AppCompatActivity implements patientInterface
 
             }
         });
-
-           }
+    }
 
     @Override
     public void onItemClick(int position) {

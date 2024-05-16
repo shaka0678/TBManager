@@ -3,16 +3,16 @@ package com.example.tbmanager;
 import java.util.Calendar;
 
 public class fenceD {
-    String fullname,duration,residence;
+    String paitentName,duration,residence;
 
     public fenceD() {}
-    public fenceD(String fullname, String duration, String residence){
-        this.fullname = fullname;
+    public fenceD(String patientName, String duration, String residence){
+        this.paitentName = patientName;
         this.duration = duration;
         this.residence = residence;
     }
-    public String getFullname() {
-        return fullname;
+    public String getPatientName(){
+        return paitentName;
     }
    public String getDuration() {
         return duration;
@@ -21,7 +21,5 @@ public class fenceD {
         return residence;
    }
 
-    public Calendar getCreationDate() {
-        return null;
-    }
+
 }

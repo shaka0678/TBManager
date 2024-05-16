@@ -43,7 +43,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
         fenceD currentUser = fenceDList.get(position);
 
 
-        holder.txtName.setText(currentUser.getFullname());
+        holder.txtName.setText(currentUser.getPatientName());
         // Update these lines according to the actual methods in fenceD class
         holder.txtAge.setText(String.valueOf(currentUser.getResidence()));
         holder.txtReside.setText(currentUser.getDuration());
