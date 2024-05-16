@@ -88,7 +88,7 @@ public class geopage extends AppCompatActivity {
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
                 // Push the data to Firebase
-                mDatabase.child("geofenced").push().setValue(geofenceData);
+                mDatabase.child("fenced").push().setValue(geofenceData);
 
                 // Display a toast message
                 Toast.makeText(geopage.this, "Geofence saved", Toast.LENGTH_SHORT).show();

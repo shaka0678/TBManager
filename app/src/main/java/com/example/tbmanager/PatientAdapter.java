@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,72 +21,51 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientViewHolder> {
+public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHolder> {
 
+    private Context mContext;
     private List<fenceD> fenceDList = new ArrayList<>();
     private DatabaseReference reference;
-    private CountDownTimer countDownTimer;
-    private Context context;
-    ProgressBar progressBardate;
 
-    public PatientAdapter(DatabaseReference reference) {
-        this.reference = reference;
+
+    public PatientAdapter(Fences fences, ArrayList<fenceD> list) {
     }
 
-
-    public void startCountDownTimer(Date targetDate) {
-        long currentTime = System.currentTimeMillis();
-        long targetTime = targetDate.getTime();
-        long remainingTime = targetTime - currentTime;
-
-        if (remainingTime > 0) {
-            countDownTimer = new CountDownTimer(remainingTime, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    // Update UI with remaining time
-                }
-
-                @Override
-                public void onFinish() {
-                    // Handle countdown finish
-                    Toast.makeText(context, "Patient geofence expired", Toast.LENGTH_SHORT).show();
-                }
-            };
-
-            countDownTimer.start();
-        } else {
-            // Handle case where target date is in the past
-        }
-    }
 
     @NonNull
     @Override
-    public PatientAdapter.PatientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_patient, parent, false);
-        return new PatientViewHolder(itemView);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PatientViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        fenceD currentUser = fenceDList.get(position);
 
+        // Bind user details to the ViewHolder
+        holder.txtName.setText((currentUser.getFullname()));
+        holder.txtAge.setText(String.valueOf(currentUser.getResidence()));
+        holder.txtReside.setText(String.valueOf(currentUser.getDuration()));
+        // Add more fields as needed
     }
-
 
     @Override
     public int getItemCount() {
         return fenceDList.size();
     }
 
-    public class PatientViewHolder extends RecyclerView.ViewHolder {
-        // Declare your views here
-        // For example: TextView nameTextView;
-        ProgressBar progressBar;
-        public PatientViewHolder(View itemView) {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView txtName, txtAge,txtReside;
+        // Add more TextViews for other user details
+
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Initialize your views here
-            progressBar = itemView.findViewById(R.id.progress_horizontal);
-            // For example: nameTextView = itemView.findViewById(R.id.nameTextView);
+            txtName = itemView.findViewById(R.id.namez);
+            txtAge = itemView.findViewById(R.id.nameb);
+            txtReside= itemView.findViewById(R.id.resid1);
+            // Initialize other TextViews here
         }
     }
 }

@@ -44,6 +44,7 @@ dependencies {
     implementation ("com.jjoe64:graphview:4.2.2")
     implementation("com.google.firebase:firebase-auth:23.0.0")
     implementation ("org.java-websocket:Java-WebSocket:1.5.1")
+    implementation ("com.google.code.gson:gson:2.10.1")
     implementation ("io.reactivex.rxjava2:rxjava:2.0.8")
     implementation ("io.reactivex.rxjava2:rxandroid:2.0.1")
 

@@ -62,6 +62,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GeofencingClient geofencingClient;
     private PendingIntent geofencePendingIntent;
     private FusedLocationProviderClient fusedLocationClient;
+    private static final String PREFS_NAME = "GeofencePrefs";
+    private static final String GEOFENCES_KEY = "Geofences";
+
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -180,8 +183,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-
-// In your MapsActivity
+    // In your MapsActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -204,6 +206,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Move the map's camera to the geofence's location
         mMap.moveCamera(CameraUpdateFactory.newLatLng(geofenceLocation));
+        fetchAndPlotCoordinates();
     }
 
     private void connectToBluetoothDevice(String deviceName) {
@@ -258,6 +261,54 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
     }
+    private void fetchAndPlotCoordinates() {
+        DatabaseReference coordinatesRef = FirebaseDatabase.getInstance().getReference("coordinates");
+        // Set up a listener to fetch coordinates
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (mMap != null) {
+                    mMap.clear(); // Clear existing markers
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Double latitude = snapshot.child("latitude").getValue(Double.class);
+                        Double longitude = snapshot.child("longitude").getValue(Double.class);
+                        if (latitude != null && longitude != null) {
+                            LatLng location = new LatLng(latitude, longitude);
+                            mMap.addCircle(new CircleOptions()
+                                    .center(location)
+                                    .radius(20) // Set the radius as needed
+                                    .strokeColor(Color.GREEN) // Outline color
+                                    .fillColor(0x2200FF00) // Fill color with transparency
+                                    .strokeWidth(5.0f));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("MapsActivity", "loadCoordinates:onCancelled", databaseError.toException());
+            }
+        };
+
+        // Attach the listener to the DatabaseReference
+        coordinatesRef.addValueEventListener(listener);
+
+        // To update the location every 60 seconds, you can use a Handler to delay the call to fetchAndPlotCoordinates
+        final Handler handler = new Handler();
+        final int delay = 60000; //milliseconds
+
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                // Clear previous listener to avoid duplicate data or memory leaks
+                coordinatesRef.removeEventListener(listener);
+                // Fetch and plot coordinates again
+                fetchAndPlotCoordinates();
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
+    }
 
     private GeofencingRequest getGeofencingRequest(List<Geofence> geofences) {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
@@ -268,7 +319,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return builder.build();
     }
 
-    private void saveGeofences(List<Geofence> geofences) {
+    private void saveGeofences1(List<Geofence> geofences) {
         for (Geofence geofence : geofences) {
             //geofence.setExpirationDuration(Geofence.NEVER_EXPIRE);
         }
