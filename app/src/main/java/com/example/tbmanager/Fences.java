@@ -37,11 +37,12 @@ public class Fences extends AppCompatActivity implements patientInterface {
     ImageButton btnback;
     private com.example.tbmanager.PatientAdapter patientAdapter;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main3);
-        recyclerView = findViewById(R.id.patlist);
+        setContentView(R.layout.activity_fences);
+        recyclerView = findViewById(R.id.recyclerViewww);
         databaseReference = FirebaseDatabase.getInstance().getReference("fenced");
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
