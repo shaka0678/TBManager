@@ -24,13 +24,12 @@ import java.util.concurrent.TimeUnit;
 public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<fenceD> fenceDList = new ArrayList<>();
-    private DatabaseReference reference;
+    private List<fenceD> fenceDList;
 
-
-    public PatientAdapter(Fences fences, ArrayList<fenceD> list) {
+    public PatientAdapter(Context context, ArrayList<fenceD> list) {
+        this.mContext = context;
+        this.fenceDList = list;
     }
-
 
     @NonNull
     @Override
@@ -43,11 +42,11 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         fenceD currentUser = fenceDList.get(position);
 
-        // Bind user details to the ViewHolder
-        holder.txtName.setText((currentUser.getFullname()));
+
+        holder.txtName.setText(currentUser.getFullname());
+        // Update these lines according to the actual methods in fenceD class
         holder.txtAge.setText(String.valueOf(currentUser.getResidence()));
-        holder.txtReside.setText(String.valueOf(currentUser.getDuration()));
-        // Add more fields as needed
+        holder.txtReside.setText(currentUser.getDuration());
     }
 
     @Override
@@ -57,15 +56,13 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView txtName, txtAge,txtReside;
-        // Add more TextViews for other user details
+        TextView txtName, txtAge, txtReside;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.namez);
             txtAge = itemView.findViewById(R.id.nameb);
-            txtReside= itemView.findViewById(R.id.resid1);
-            // Initialize other TextViews here
+            txtReside = itemView.findViewById(R.id.resid1);
         }
     }
 }

@@ -34,7 +34,7 @@ public class Fences extends AppCompatActivity implements patientInterface {
     DatabaseReference databaseReference;
     ArrayList<fenceD> list;
 
-    ImageButton btnback;
+    //ImageButton btnback;
     private com.example.tbmanager.PatientAdapter patientAdapter;
 
     @SuppressLint("MissingInflatedId")
