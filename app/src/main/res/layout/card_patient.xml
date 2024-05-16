@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="20dp"
+    card_view:cardElevation="8dp"
     android:layout_marginEnd="20dp"
     card_view:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="4dp">
+    card_view:cardCornerRadius="24dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +24,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Full name: "
+                android:text="Patient Name:"
                 android:id="@+id/namez"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
