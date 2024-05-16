@@ -1,5 +1,7 @@
 package com.example.tbmanager;
 
+import java.util.Calendar;
+
 public class fenceD {
     String fullname,duration,residence;
 
@@ -18,4 +20,8 @@ public class fenceD {
    public String getResidence() {
         return residence;
    }
+
+    public Calendar getCreationDate() {
+        return null;
+    }
 }

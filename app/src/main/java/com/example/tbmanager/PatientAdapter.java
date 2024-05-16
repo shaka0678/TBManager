@@ -5,6 +5,7 @@ import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,16 +18,20 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientViewHolder> {
 
     private List<fenceD> fenceDList = new ArrayList<>();
     private DatabaseReference reference;
     private CountDownTimer countDownTimer;
     private Context context;
+    ProgressBar progressBardate;
 
     public PatientAdapter(DatabaseReference reference) {
         this.reference = reference;
     }
+
 
     public void startCountDownTimer(Date targetDate) {
         long currentTime = System.currentTimeMillis();
@@ -62,12 +67,10 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PatientAdapter.PatientViewHolder holder, int position) {
-        fenceD fenceD = fenceDList.get(position);
-        // Set your data to your views here
-        // You can access the views from the holder object
-        // For example: holder.nameTextView.setText(fenceD.getName());
+    public void onBindViewHolder(@NonNull PatientViewHolder holder, int position) {
+
     }
+
 
     @Override
     public int getItemCount() {
@@ -77,10 +80,11 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.PatientV
     public class PatientViewHolder extends RecyclerView.ViewHolder {
         // Declare your views here
         // For example: TextView nameTextView;
-
+        ProgressBar progressBar;
         public PatientViewHolder(View itemView) {
             super(itemView);
             // Initialize your views here
+            progressBar = itemView.findViewById(R.id.progress_horizontal);
             // For example: nameTextView = itemView.findViewById(R.id.nameTextView);
         }
     }
