@@ -210,6 +210,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(geofenceLocation));
         fetchAndPlotCoordinates();
         fetchAndDisplayGeofences();
+
     }
 
 
@@ -262,7 +263,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 });
     }
     private void fetchAndPlotCoordinates() {
-        DatabaseReference coordinatesRef = FirebaseDatabase.getInstance().getReference("coordinates");
+        DatabaseReference coordinatesRef = FirebaseDatabase.getInstance().getReference("fenced");
         // Set up a listener to fetch coordinates
         ValueEventListener listener = new ValueEventListener() {
             @Override

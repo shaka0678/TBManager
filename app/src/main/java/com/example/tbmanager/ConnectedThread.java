@@ -57,7 +57,7 @@ public class ConnectedThread extends Thread {
                     double longitude = Double.parseDouble(coords[0]);
                     double latitude = Double.parseDouble(coords[1]);
 
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geocoords");
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("fenced");
                     Map<String, Double> coordMap = new HashMap<>();
                     coordMap.put("longitude", longitude);
                     coordMap.put("latitude", latitude);
