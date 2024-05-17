@@ -210,10 +210,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(geofenceLocation));
         fetchAndPlotCoordinates();
         fetchAndDisplayGeofences();
+        addCustomMarker();
 
     }
 
+    private void addCustomMarker() {
+        if (mMap != null) {
+            LatLng customLocation = new LatLng(-0.6167262999745545, 30.655961721883198);
+            mMap.addMarker(new MarkerOptions()
+                    .position(customLocation)
+                    .title("Custom Location")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 
+            // Optionally, move the camera to this location
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(customLocation, 15));
+        }
+    }
 
     private void parseAndDisplayLocation(String data) {
         // Assuming data format is latitude:longitude
