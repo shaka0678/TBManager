@@ -52,7 +52,9 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -207,12 +209,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Move the map's camera to the geofence's location
         mMap.moveCamera(CameraUpdateFactory.newLatLng(geofenceLocation));
         fetchAndPlotCoordinates();
+        fetchAndDisplayGeofences();
     }
 
-    private void connectToBluetoothDevice(String deviceName) {
-        // Replace this with actual Bluetooth connection logic
-        Toast.makeText(this, "Connecting to " + deviceName, Toast.LENGTH_SHORT).show();
-    }
+
 
     private void parseAndDisplayLocation(String data) {
         // Assuming data format is latitude:longitude
@@ -308,6 +308,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 handler.postDelayed(this, delay);
             }
         }, delay);
+    }
+    private void saveGeofenceToFirebase(Geofence geofence, double latitude, double longitude, float radius) {
+        String geofenceId = geofence.getRequestId(); // Assuming you set this as the identifier
+        Map<String, Object> geofenceDetails = new HashMap<>();
+        geofenceDetails.put("latitude", latitude);
+        geofenceDetails.put("longitude", longitude);
+        geofenceDetails.put("radius", radius);
+
+        DatabaseReference geofencesRef = database.getReference("Geofences");
+        geofencesRef.child(geofenceId).setValue(geofenceDetails);
+    }
+    private void fetchAndDisplayGeofences() {
+        DatabaseReference geofencesRef = database.getReference("Geofences");
+        geofencesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    double latitude = snapshot.child("latitude").getValue(Double.class);
+                    double longitude = snapshot.child("longitude").getValue(Double.class);
+                    float radius = snapshot.child("radius").getValue(Float.class);
+                    LatLng geofenceLocation = new LatLng(latitude, longitude);
+
+                    mMap.addCircle(new CircleOptions()
+                            .center(geofenceLocation)
+                            .radius(radius)
+                            .strokeColor(Color.RED)
+                            .fillColor(0x22FF0000)
+                            .strokeWidth(5.0f));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("MapsActivity", "loadGeofences:onCancelled", databaseError.toException());
+            }
+        });
     }
 
     private GeofencingRequest getGeofencingRequest(List<Geofence> geofences) {
