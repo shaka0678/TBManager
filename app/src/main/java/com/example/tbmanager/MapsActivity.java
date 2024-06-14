@@ -217,36 +217,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
-    private void addCustomMarker() {
-        if (mMap != null) {
-            LatLng customLocation = new LatLng(-0.6167262999745545, 30.655961721883198);
-            if (customMarker != null) {
-                customMarker.remove(); // Remove the existing marker if it exists
-            }
-            customMarker = mMap.addMarker(new MarkerOptions()
-                    .position(customLocation)
-                    .title("Custom Location")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-
-            // Optionally, move the camera to this location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(customLocation, 15));
-        }
-    }
-
-    private void removeCustomMarker() {
-        if (customMarker != null) {
-            customMarker.remove(); // Remove the marker
-            customMarker = null; // Clear the reference
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        removeCustomMarker(); // Ensure the marker is removed when the activity is destroyed
-    }
-
     private void parseAndDisplayLocation(String data) {
         // Assuming data format is latitude:longitude
         String[] parts = data.split(":");
